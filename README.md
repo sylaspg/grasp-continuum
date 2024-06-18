@@ -8,6 +8,12 @@ The General-purpose Relativistic Atomic Structure Package (GRASP) is a set of Fo
 programs for performing fully-relativistic electron structure calculations of
 atoms.
 
+## About this fork
+This fork is intended for incorporating the continuum electron calculations 
+in both elastic (single channel) and inelastic (multi-channel) processes into the GRASP. 
+The work is still in progress, so until there's no 'release' version, 
+it should be treated as temporary repository and not be used in 'real' calculations. 
+
 ## Installation
 
 > **Please note:**
