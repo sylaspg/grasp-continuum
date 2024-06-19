@@ -25,6 +25,9 @@
       USE vast_kind_param, ONLY:  DOUBLE
       USE memory_man
       USE blkidx_C
+! PS
+      USE continuum_C
+! PS END
       USE default_C
       USE def_C
       USE debug_C
@@ -159,10 +162,31 @@
 
          CALL SETLAG (EOL)
 
+! PS
+! Mark last orbital as a continuum one. There should be only one electron there.
+         IF (CO_CALCULATE) THEN
+            CO_ORBITAL = NW
+            IF (CO_CALCULATE .AND. UCF(CO_ORBITAL) /= 1) THEN
+               PRINT*
+               PRINT*, "RMCDHF: In continuum calculations ",&
+                       "only one electron at the outermost orbital is allowed."
+               STOP "Program execution terminated."
+            END IF
+            PRINT*
+            PRINT*,"Orbital ", NP(NW), NH(NW), "(no. ",CO_ORBITAL,") marked as continuum."
+            PRINT*," kappa = ",NAK(NW)
+            PRINT*," energy = ",E(NW)," hartree"
+         END IF
+! PS END
+
 !   Improve all orbitals in turn
 
          DAMPMX = 0.0
-         IF (MYID == 0) WRITE (*, 302)
+! PS
+         IF (.NOT. CO_CALCULATE) THEN
+            IF (MYID == 0) WRITE (*, 302)
+         END IF
+! PS END
          DO J = 1, NW
             JSEQ = IORDER(J)
             IF (LFIX(JSEQ)) CYCLE
@@ -206,6 +230,16 @@
 !   For OL calculation, orthst is true and orbitals are orthonormalized
 !   in subroutine improv. For AL calculation, orthst is false.
          IF (.NOT.ORTHST) CALL ORTHSC
+
+! PS
+! Perform normalization of the continuum orbital
+! and calculate scattering length if electron energy = 0
+         IF (CO_CALCULATE) THEN
+            IF (CO_NORMALIZE .AND. CO_ENERGY /= 0.0D0) CALL co_normalization(CO_ORBITAL)
+            IF (CO_ENERGY == 0.0D0) CALL co_scattering_length(CO_ORBITAL)
+            CALL co_save_to_file(CO_ORBITAL)
+         END IF
+! PS END
 
 !   Write the subshell radial wavefunctions to the .rwf file
 

@@ -21,6 +21,9 @@
 !-----------------------------------------------
       USE vast_kind_param,  ONLY: DOUBLE
       USE parameter_def,    ONLY: NNNW
+! PS
+      USE continuum_C
+! PS END
       USE COUN_C
       USE damp_C, ONLY: odamp, cdamp
       USE DEF_C
@@ -71,6 +74,9 @@
       INTEGER :: I, J, IEND, IBEG, LENTH, NSUBS, LOC
       REAL(DOUBLE) :: ODAMPU, CDAMPU
       LOGICAL :: YES
+! PS
+      LOGICAL :: co_file_exists
+! PS END
       CHARACTER :: RECORD*80, CNUM*20
 !-----------------------------------------------
 !
@@ -218,6 +224,32 @@
       ELSE
          YES = .FALSE.
       ENDIF
+
+! PS
+! Read input data for continuum electron calculations
+! TODO: (Maybe) introduce interactive questions instead
+      INQUIRE(FILE="continuum.inp", EXIST=co_file_exists)
+      IF (co_file_exists) THEN
+         PRINT*, "Reading the input file for continuum calculations..."
+         OPEN(632, file="continuum.inp", FORM="FORMATTED")
+         READ(632,'(A)') CO_DUMMY
+         READ(632,*) CO_CALCULATE
+         READ(632,'(A)') CO_DUMMY
+         READ(632,*) CO_ENERGY
+         READ(632,'(A)') CO_DUMMY
+         READ(632,*) CO_NORMALIZE
+         READ(632,'(A)') CO_DUMMY
+         READ(632,*) CO_INCLUDE_POLARIZATION
+         PRINT*,"Perform continuum orbital calculations = ", CO_CALCULATE
+         PRINT*,"Continuum electron energy (hartree) = ", CO_ENERGY
+         PRINT*,"Continuum electron normalization = ", CO_NORMALIZE
+         PRINT*,"Include polarization potential = ", CO_INCLUDE_POLARIZATION
+         CLOSE(632)
+         PRINT*, "Read complete."
+      ELSE
+         CO_CALCULATE = .FALSE.
+      ENDIF
+! PS END
 
       IF (.NOT.YES) RETURN
 !=======================================================================

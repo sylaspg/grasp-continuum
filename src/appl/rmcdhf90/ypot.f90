@@ -21,6 +21,10 @@
 !-----------------------------------------------
       USE vast_kind_param,  ONLY: DOUBLE
       USE parameter_def,    ONLY: KEYORB
+! PS
+      USE continuum_C
+      USE def_C, ONLY: Z
+! PS END
       USE debug_C
       USE grid_C
       USE npot_C
@@ -42,6 +46,13 @@
 !   L o c a l   P a r a m e t e r s
 !-----------------------------------------------
       INTEGER, PARAMETER :: KEY = KEYORB
+! PS
+      real(DOUBLE), dimension(:), allocatable :: rpol
+      real(DOUBLE), dimension(:), allocatable :: vpol
+      character(len=256) :: vpol_file = "vpol"
+      integer            :: n_vpol
+      logical            :: vpol_file_exists
+! PS END
 !-----------------------------------------------
 !   L o c a l   V a r i a b l e s
 !-----------------------------------------------
@@ -75,6 +86,47 @@
          CALL YZK (K, IOY1, IOY2)                ! Accumulate contributions
          YP(:N) = YP(:N) - COEFF*TB(:N)
       END DO
+!
+! PS Add polarization potential
+      IF (CO_CALCULATE .AND. CO_INCLUDE_POLARIZATION .AND. J == CO_ORBITAL) THEN
+
+            inquire (file=vpol_file, exist=vpol_file_exists)
+
+            if (vpol_file_exists) then
+                 print*, "Include polarization potential: read from ", vpol_file, " file."
+
+                 open(UNIT=76, FILE=vpol_file, FORM="FORMATTED")
+
+                 read(76, *) n_vpol
+                 if (.not. allocated(rpol)) allocate(rpol(1:n_vpol))
+                 if (.not. allocated(vpol)) allocate(vpol(1:n_vpol))
+                 do i = 1,n_vpol
+                     read(76, *) rpol(i), vpol(i)
+                 end do
+
+                 close(76)
+
+                 do i=1, N
+                     if (R(i) <= rpol(1) .or. R(i) >= rpol(n_vpol)) then
+                         CO_VPOL(i) = 0.0D0
+                     else
+                         call INTERP(rpol, vpol, n_vpol, R(i), CO_VPOL(i), 0.1D0)
+                     end if
+                 end do
+                 YP(:N) = YP(:N) - CO_VPOL(:N) * R(:N)
+
+            else
+
+                  CALL co_set_polarization_potential_parameters(Z)
+                  PRINT*,"Include polarization potential: alpha_d = ", CO_ALPHA_D, ", <R0^3> = ", CO_R0_3
+
+                  CO_VPOL(:N) = -0.5 * CO_ALPHA_D * R(:N)**2 / (R(:N)**3 + CO_R0_3)**2
+                  YP(:N) = YP(:N) - CO_VPOL(:N) * R(:N)
+
+            end if
+
+      END IF
+! PS END
 !
 !   Debug printout
 !

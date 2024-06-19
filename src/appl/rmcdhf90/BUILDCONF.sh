@@ -58,6 +58,10 @@ solve.f90 solve_I.f90
 improv.f90 improv_I.f90
 scf.f90 scf_I.f90
 strsum.f90 strsum_I.f90
+co_getmax.f90
+co_normalization.f90
+co_save_to_file.f90
+co_scattering_length.f90
 
 rscfvu.f90
 "

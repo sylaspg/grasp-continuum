@@ -10,12 +10,22 @@ PROGRAM rwfnplot
    CHARACTER leg*50, format_string*50, name*100
    DIMENSION el(30)
    INTEGER np, lp, jp, nn, laky, ll, jj, npts, j, i, nwf
+! PS
+   CHARACTER line*100
+   INTEGER io_stat
+! PS END
 
    write (*, *) 'RWFNPLOT'
-   write (*, *) 'Program to generate Matlab/GNU Octave and'
-   write (*, *) 'Xmgrace files that plot radial orbitals'
-   write (*, *) 'Input file:  name.w'
-   write (*, *) 'Output files: octave_name.m, xmgrace_name.agr'
+! PS
+      !write(*,*) 'Program to generate Matlab/GNU Octave and'
+      !write(*,*) 'Xmgrace files that plot radial orbitals'
+   write(*,*) 'Program to generate Matlab/GNU Octave,'
+   write(*,*) 'Xmgrace and gnuplot files that plot radial orbitals'
+   write(*,*) 'Input file:  name.w'
+   !write(*,*) 'Output files: octave_name.m, xmgrace_name.agr'
+   write(*,*) 'Output files: octave_name.m, xmgrace_name.agr, &
+                             gnuplot_name.plt'
+! PS END
    write (*, *)
    write (*, *) 'To plot orbital: press enter'
    write (*, *) 'To remove orbital: type "d" or "D" and press enter'
@@ -28,7 +38,10 @@ PROGRAM rwfnplot
    OPEN (3, FILE=trim(name)//'.w', STATUS='OLD', FORM='UNFORMATTED')
    OPEN (4, FILE='octave_'//trim(name)//'.m', STATUS='UNKNOWN')
    OPEN (8, FILE='xmgrace_'//trim(name)//'.agr', STATUS='UNKNOWN')
-
+! PS
+   OPEN(10,FILE=trim(name)//"_tmp",STATUS='UNKNOWN')
+   OPEN(11,FILE=trim(name),STATUS='UNKNOWN')
+! PS END
    write (*, *)
    write (*, *) 'To have r on x-axis: type "y" otherwise "n" for sqrt(r)'
    read (*, *) xa
@@ -113,7 +126,9 @@ PROGRAM rwfnplot
             '@    s', i - 1, '  legend  "', el(i), '"'
          write (8, *) trim(leg)
          write (8, *) '# ', el(i)
-
+! PS
+         write(10,*) '#     r                   P(r)                   Q(r)'
+! PS END
          i = i + 1
          write (4, *) 'P = ['
          DO j = 1, npts
@@ -122,10 +137,16 @@ PROGRAM rwfnplot
                if (abs(pg(j)) .gt. 0.0005 .OR. j .EQ. 1) &
                   WRITE (4, '(3D20.10)') rg(j), pg(j), qg(j)
                WRITE (8, '(3D20.10)') rg(j), pg(j), qg(j)
+! PS
+               WRITE (10, '(3E20.10)') rg(j), pg(j), qg(j)
+! PS END
             else
                if (abs(pg(j)) .gt. 0.0005 .OR. j .EQ. 1) &
                   WRITE (4, '(3D20.10)') rg2(j), pg(j), qg(j)
                WRITE (8, '(3D20.10)') rg2(j), pg(j), qg(j)
+! PS
+               WRITE (10, '(3E20.10)') rg2(j), pg(j), qg(j)
+! PS END
             end if
          ENDDO
          write (8, *)
@@ -155,6 +176,21 @@ PROGRAM rwfnplot
          write (4, 102, advance='no') '''', el(i), ''')'
       END IF
    ENDDO
+! PS
+   write(11,'(AI3)', advance='no') 'plot '
+   DO i=0,nwf-2
+      write(11,'(AI2A)', advance='no') '"-" index ', i, " using 1:2 with lines, "
+   ENDDO
+   write(11,'(AI2A)') '"-" index ', i, " using 1:2 with lines"
+   rewind(10)
+   do
+     read(10, '(A)', iostat=io_stat) line
+     if (io_stat /= 0) exit
+     write(11, '(A)') trim(line)
+   end do
+   close(10,status="delete")
+   close(11)
+! PS END
 101 format(a)
 102 format(3a)
    PRINT *, ' Finished.'

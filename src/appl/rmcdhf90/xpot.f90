@@ -113,6 +113,15 @@
          CALL DRAW (XP, 1.0D00, XQ, C, N)
       ENDIF
 !
+! PS Set the exchange potential to zero, for debugging only!
+      !PRINT *, "EXCHANGE-ZERO!"
+      !DO I = 1, N
+      !      XP(I) = 0.0D0
+      !      XQ(I) = 0.0D0
+      !      WRITE (77, *) R(I), XP(I), XQ(I)
+      !ENDDO
+! PS END
+
       RETURN
 !
   300 FORMAT(/,/,' Exchange potential contributions (coefficients will ',&

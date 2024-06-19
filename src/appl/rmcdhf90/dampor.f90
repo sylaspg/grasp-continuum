@@ -18,6 +18,9 @@
 !-----------------------------------------------
       USE vast_kind_param,  ONLY: DOUBLE
       USE parameter_def,    ONLY: NNNP
+! PS
+      USE continuum_C
+! END PS
       USE damp_C
       USE def_C
       USE grid_C
@@ -63,6 +66,13 @@
 !XHH odampj goes to the argument
 !      ODAMPJ = ABS (ODAMP(J))
 !
+! PS
+! Ordinary "hack" to extend the grid for continuum orbital
+! TODO: Find better place for that...
+      IF (CO_CALCULATE .AND. J == CO_ORBITAL) THEN
+            MF(J) = NNNP
+      END IF
+! PS END
       IF (ODAMPJ > EPS) THEN
 !
          FACTOR = 1.0D00 - ODAMPJ

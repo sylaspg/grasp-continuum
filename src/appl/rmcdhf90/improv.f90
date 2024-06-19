@@ -9,6 +9,9 @@
 !-----------------------------------------------
       USE vast_kind_param, ONLY:  DOUBLE
       USE CORRE_C
+! PS
+      USE continuum_C
+! PS END
       USE damp_C
       USE def_C
       USE grid_C
@@ -120,7 +123,15 @@
       TA(2:MTP0) = (P(2:MTP0)**2+Q(2:MTP0)**2)*RP(2:MTP0)
       MTP = MTP0
 
-      CALL QUAD (DNORM)
+! PS
+      ! CALL QUAD (DNORM)
+      ! QUAD returns 0.0 in case of continuum wave function, so forcing the 1.0 value
+      IF (CO_CALCULATE .AND. J == CO_ORBITAL) THEN
+            DNORM = 1.0
+         ELSE
+            CALL QUAD (DNORM)
+      ENDIF
+! PS END
 
 !   Determine self-consistency [multiplied by SQRT(UCF(J))]
 
@@ -170,11 +181,15 @@
 !
 !   Print details of iteration
 !
-      IF (MYID == 0)                                                &
-         WRITE (*, 302) NP(J),NH(J),E(J),METHOD(J),PZ(J),SCNSTY(J), &
-!cjb DNORM-1 -> SQRT(DNORM)-1
-!cjb                    DNORM - 1, ODAMPJ, JP, MF(J), INV, NNP
-                        SQRT(DNORM)-1,ODAMPJ,JP,MF(J),INV,NNP
+! PS
+      IF (.NOT. CO_CALCULATE) THEN
+            IF (MYID == 0)                                                &
+               WRITE (*, 302) NP(J),NH(J),E(J),METHOD(J),PZ(J),SCNSTY(J), &
+   !cjb DNORM-1 -> SQRT(DNORM)-1
+   !cjb                    DNORM - 1, ODAMPJ, JP, MF(J), INV, NNP
+                           SQRT(DNORM)-1,ODAMPJ,JP,MF(J),INV,NNP
+      END IF
+! PS END
       DAMPMX = MAX(DAMPMX,ABS(ODAMPJ))
 
   300 FORMAT(/,' Failure; equation for orbital ',1I2,1A2,&

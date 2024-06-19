@@ -103,6 +103,7 @@ add_library(mod STATIC
     wchblk_C.f90
     wfac_C.f90
     whfrom_C.f90
+    continuum_C.f90
 )
 setup_fortran_modules(mod)
 install(TARGETS mod DESTINATION lib/)

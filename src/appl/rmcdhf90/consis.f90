@@ -14,6 +14,9 @@
 !   M o d u l e s
 !-----------------------------------------------
       USE vast_kind_param, ONLY:  DOUBLE
+! PS
+      USE continuum_C
+! PS END
       USE grid_C
       USE int_C
       USE scf_C
@@ -37,7 +40,15 @@
          DELTAO = ABS(P(I)-PF(I,J)) + ABS(Q(I)-QF(I,J))
          SCMEA = DMAX1(DELTAO,SCMEA)
       END DO
-      SCNSTY(J) = SCMEA*SQRT(UCF(J))
+! PS
+!     SCNSTY(J) = SCMEA*SQRT(UCF(J))
+! Now some cheating...
+      IF (CO_CALCULATE .AND. J == CO_ORBITAL) THEN
+            SCNSTY(J) = 1.0D0
+      ELSE
+            SCNSTY(J) = SCMEA*SQRT(UCF(J))
+      END IF
+! PS END
 !
       RETURN
       END SUBROUTINE CONSIS

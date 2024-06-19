@@ -26,6 +26,9 @@
 !-----------------------------------------------
       USE vast_kind_param, ONLY: DOUBLE
       USE IOUNIT_C
+! PS
+      USE continuum_C
+! PS END
       USE DEF_C
       USE GRID_C
       USE INT_C,           ONLY: TF, TG
@@ -75,10 +78,17 @@
 !
 !   Trap for inappropriate grid
 !
+! PS
+! Disable grid "trap" for continuum orbital
       IF (JP == 0) THEN
-         WRITE (ISTDE, *) 'SETPOT: Join set to NNNP/2 = ', nnnp/2
-         JP = NNNP/2
+         IF (.NOT. CO_CALCULATE .OR. CO_CALCULATE  .AND. J /= CO_ORBITAL) THEN
+            WRITE (ISTDE, *) 'SETPOT: Grid of insufficient extent.'
+               STOP
+         ENDIF
       ENDIF
+! Set the Joint point at the last point in a grid
+      IF (CO_CALCULATE .AND. J == CO_ORBITAL) JP = N
+! PS END
 !
       RETURN
       END SUBROUTINE SETPOT

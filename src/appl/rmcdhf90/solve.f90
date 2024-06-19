@@ -28,6 +28,9 @@
 !-----------------------------------------------
       USE vast_kind_param,  ONLY: DOUBLE
       USE parameter_def,    ONLY: NNNP
+! PS
+      USE continuum_C
+! PS END
       USE debug_C
       USE def_C, ONLY: C, NSOLV
       USE grid_C, ONLY: rp
@@ -94,7 +97,18 @@
 !
       CALL ESTIM (J)
       ELAST = E(J)
-      E(J) = EIGEN(J)
+! PS
+!     E(J) = EIGEN(J)
+      ! Force the fixed energy of the continuum electron
+      IF (CO_CALCULATE .AND. J == CO_ORBITAL) THEN
+         E(J) = CO_ENERGY
+         P0 = PZ(J)
+         ! Skip bounds checks
+         GOTO 1
+      ELSE
+         E(J) = EIGEN(J)
+      ENDIF
+! PS END
 !
 !   Checks on lower bounds
 !
@@ -162,7 +176,13 @@
       CALL START (J, ICASE, P0, PH, Q0, QH)
       CALL OUT (J, JP, PH, QH)
       QJPOH = QH(JP)
-      CALL IN (J, JP, PH, QH, MTPH)
+! PS
+!     CALL IN (J, JP, PH, QH, MTPH)
+! Skip the IN procedure for continuuum orbital
+      IF (.NOT. CO_CALCULATE .OR. (CO_CALCULATE .AND. J /= CO_ORBITAL)) THEN
+         CALL IN (J, JP, PH, QH, MTPH)
+      ENDIF
+! PS END
       QJPIH = QH(JP)
 !
 !   Set up right-hand side for inhomogeneous equations; integrate
@@ -174,7 +194,13 @@
       CALL START (J, ICASE, P0, P, Q0, Q)
       CALL OUT (J, JP, P, Q)
       QJPOI = Q(JP)
-      CALL IN (J, JP, P, Q, MTPI)
+! PS
+!     CALL IN (J, JP, P, Q, MTPI)
+! Skip the IN procedure for continuuum orbital
+      IF (.NOT. CO_CALCULATE .OR. (CO_CALCULATE .AND. J /= CO_ORBITAL)) THEN
+         CALL IN (J, JP, P, Q, MTPI)
+      ENDIF
+! PS END
       QJPII = Q(JP)
 !
 !   Determine energy adjustment for methods 1 and 2
@@ -191,7 +217,15 @@
 !   Generate the continuous solution
 !
       MTPC = MAX(MTPH,MTPI)
-      ALFA = -(QJPII - QJPOI)/(QJPIH - QJPOH)
+! PS
+!      ALFA = -(QJPII - QJPOI)/(QJPIH - QJPOH)
+! QJPIH = QJPOH = 0.0 in case of continuum so removing them from formula
+      IF (CO_CALCULATE .AND. J == CO_ORBITAL) THEN
+         ALFA = -(QJPII - QJPOI)
+      ELSE
+         ALFA = -(QJPII - QJPOI)/(QJPIH - QJPOH)
+      ENDIF
+! PS END
       P0H = P0
       P0 = P0*(1.0D00 + ALFA)
       P(:MTPC) = P(:MTPC) + ALFA*PH(:MTPC)
@@ -209,7 +243,13 @@
          CALL START (J, ICASE, P0V, PV, Q0V, QV)
          CALL OUT (J, JP, PV, QV)
          QJPOV = QV(JP)
-         CALL IN (J, JP, PV, QV, MTPV)
+! PS
+!        CALL IN (J, JP, PV, QV, MTPV)
+! Skip the IN procedure for continuuum orbital
+         IF (.NOT. CO_CALCULATE .OR. (CO_CALCULATE .AND. J /= CO_ORBITAL)) THEN
+            CALL IN (J, JP, PV, QV, MTPV)
+         ENDIF
+! PS END
          QJPIV = QV(JP)
 !
 !   Generate continuous solutions
