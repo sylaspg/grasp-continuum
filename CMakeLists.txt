@@ -109,12 +109,14 @@ set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
 #
 set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fno-automatic")
 
+# PS
 set(GRASP ${PROJECT_SOURCE_DIR})
 unset(GRASP_CMakeLists_user CACHE)
 find_file(GRASP_CMakeLists_user "CMakeLists.user" ${PROJECT_SOURCE_DIR})
 if(NOT "${GRASP_CMakeLists_user}" STREQUAL "GRASP_CMakeLists_user-NOTFOUND")
     include(${GRASP_CMakeLists_user})
 endif()
+# PS END
 
 message("Compiler flags etc. for this GRASP build:")
 message("* CMAKE_BUILD_TYPE:                ${CMAKE_BUILD_TYPE}")
@@ -195,9 +197,12 @@ add_subdirectory("test")
 #
 # We also set the GRASP variable that the user-defined targets can use to figure
 # out where the root of the GRASP source tree is.
+
+# PS
 #set(GRASP ${PROJECT_SOURCE_DIR})
 #unset(GRASP_CMakeLists_user CACHE)
 #find_file(GRASP_CMakeLists_user "CMakeLists.user" ${PROJECT_SOURCE_DIR})
 #if(NOT "${GRASP_CMakeLists_user}" STREQUAL "GRASP_CMakeLists_user-NOTFOUND")
 #    include(${GRASP_CMakeLists_user})
 #endif()
+# PS END

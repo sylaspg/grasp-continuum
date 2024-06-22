@@ -112,6 +112,7 @@ add_executable(rmcdhf
     co_normalization.f90
     co_save_to_file.f90
     co_scattering_length.f90
+    co_add_polarization_potential.f90
     rscfvu.f90
 )
 target_link_libraries_Fortran(rmcdhf PUBLIC dvd90 9290 mod)

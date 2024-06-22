@@ -7,6 +7,9 @@
 !-----------------------------------------------
       USE vast_kind_param,  ONLY: DOUBLE
       USE parameter_def,    ONLY: NNNW
+! PS
+      USE continuum_C
+! PS END
       USE memory_man
       USE blkidx_C
       USE damp_C, ONLY: cdamp, odamp
@@ -87,8 +90,15 @@
 !
       LFIX(:NW) = .TRUE.
 
-      WRITE (ISTDE, *) 'Enter orbitals to be varied (Updating order)'
-      CALL GETRSL (INDX, NSUBS)
+      IF (CO_CALCULATE) THEN
+            NSUBS = 1
+            INDX(NSUBS) = NW
+            WRITE (ISTDE, *) &
+                  'The last orbital (treated as continuum) will be varied.'
+      ELSE
+            WRITE (ISTDE, *) 'Enter orbitals to be varied (Updating order)'
+            CALL GETRSL (INDX, NSUBS)
+      END IF
 
       LFIX(INDX(:NSUBS)) = .FALSE.
 !XHH      give a big value, rather than zero to scnsty()
@@ -111,9 +121,14 @@
 !XHH added a array to store the index of the correlation functions
 !
       LCORRE(:NW) = .TRUE.
-
-      WRITE (ISTDE, *) 'Which of these are spectroscopic orbitals?'
-      CALL GETRSL (INDX, NSUBS)
+! PS
+      IF (CO_CALCULATE) THEN
+            NSUBS = 0
+      ELSE
+            WRITE (ISTDE, *) 'Which of these are spectroscopic orbitals?'
+            CALL GETRSL (INDX, NSUBS)
+      END IF
+! PS END
       IF (NSUBS > 0) THEN
          DO I = 1, NSUBS
             LOC = INDX(I)

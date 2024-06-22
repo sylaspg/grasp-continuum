@@ -1,0 +1,63 @@
+#!/bin/sh
+
+set -x
+
+###### 2. Continuum state ######
+
+# Add one electron at the additional orbital to CSFs list.
+# It will be treated as continuum electron during the SCF procedure.
+# Principal quantum number will be ignored,
+# kappa will be determined from the subshell designation.
+# E.g. 4s(1,*) means 1 electron of kappa = -1 (s-wave), J = 1/2
+rcsfgenerate << S1
+*
+3         ! Argon
+4s(1,*)   ! Additional electron
+
+4s
+1,1
+0         ! No excitations
+n
+S1
+
+mv rcsf.out rcsf.inp
+
+rangular << S2
+y
+S2
+
+# Initial radial wave functions estimates.
+# Use previosly calculated rwf for bound states (Ar.w),
+# and any other method for the addidtional (continuum) orbital.
+rwfnestimate << S3
+y
+1
+Ar.w
+*
+2
+*
+S3
+
+# Now run rmcdhf for continuum wave function calculation.
+# Grid should be long enough, and dense enough
+# to obtain "nice-looking" function.
+# Most important switches/answers are described below.
+rmcdhf << S4
+n          ! Do not use default settings
+n
+y          ! Enable continuum orbital calculations
+-0.1       ! Continuum electron energy (hartree, negative)
+1          ! Include polarization potential with default parameters
+n          ! Do not normalize calculated continuum wave function
+y          ! Change defaut speed of light or radial grid parameters
+n
+y          ! Revise default radial grid parameters
+1.0E-007   ! New RNT
+5.0E-2     ! New H
+0.2        ! New HP; use non-zero value to force the lin-log grid
+5000       ! New N; Use as big as possibe
+n
+999
+n
+1
+S4

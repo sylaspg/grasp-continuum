@@ -26,6 +26,9 @@
 !-----------------------------------------------
       USE memory_man
       USE DEF_C
+! PS
+      USE continuum_C
+! PS END
       USE hblock_C
       use iounit_C
 !-----------------------------------------------
@@ -54,7 +57,10 @@
       NCMAXBLK = 0
 
       WRITE (ISTDE, *)
-      WRITE (ISTDE, *) 'Enter ASF serial numbers for each block'
+! PS
+      IF (.NOT. CO_CALCULATE) &
+            WRITE (ISTDE, *) 'Enter ASF serial numbers for each block'
+! PS END
 
       NCMIN = 0
   123 CONTINUE
@@ -66,7 +72,11 @@
 
 !        ...Read and parse the list of levels
 
-         READ (*, '(A)') STR
+         IF (CO_CALCULATE) THEN
+            STR = "1"
+         ELSE
+            READ (*, '(A)') STR
+         END IF
          WRITE(734,'(a)') trim(str) ! write to rscf.log file see, rscf
 
 !        ...ICCMIN is allocated and accumulated in items

@@ -1,0 +1,59 @@
+#!/bin/sh
+
+set -x
+
+###### 1. Bound states ######
+# If you already have optimized radial wave functions
+# for bound states (together with the isodata file),
+# they can be used directly in the second step.
+# Below only a trivial example (DF) is demonstrated
+# for Argon atom.
+
+# Nucleus
+rnucleus << S1
+18
+40
+n
+39.962384
+0
+0
+0
+S1
+
+# Expansion; 1 CSF (DF) only, since its simple example
+rcsfgenerate << S2
+*
+2
+3s(2,*)3p(6,*)
+
+3s
+0,0
+0
+n
+S2
+
+mv rcsf.out rcsf.inp
+
+# Angular part
+rangular << S3
+y
+S3
+
+# Initial radial estimates
+rwfnestimate << S4
+y
+2
+*
+S4
+
+# Optimize bound states
+rmcdhf << S5
+y
+1
+*
+*
+999
+S5
+
+# Save results
+rsave Ar

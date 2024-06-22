@@ -1,6 +1,6 @@
 !***********************************************************************
 !                                                                      *
-subroutine co_getmax(x,y,n,xmax,ymax)
+SUBROUTINE co_getmax(x,y,n,xmax,ymax)
 !                                                                      *
 !   Returns the location xmax and the corresponding value ymax         *
 !   of a local a local maximum by interpolation.                       *
@@ -51,4 +51,4 @@ subroutine co_getmax(x,y,n,xmax,ymax)
         END IF
     END DO
 
-end subroutine co_getmax
+END SUBROUTINE co_getmax

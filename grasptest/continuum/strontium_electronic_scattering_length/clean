@@ -1,0 +1,4 @@
+rm clist.new
+rm continuum.csp
+rm m*
+rm r*

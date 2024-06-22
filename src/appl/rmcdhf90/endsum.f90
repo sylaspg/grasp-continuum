@@ -20,6 +20,7 @@
 !-----------------------------------------------
       USE vast_kind_param, ONLY:  DOUBLE
       USE def_C
+      USE continuum_C
       USE eigv_C
       USE orb_C
       USE scf_C
@@ -45,6 +46,19 @@
 !
 !   Write out the orbital properties
 !
+! PS
+      IF (CO_CALCULATE) THEN
+         WRITE(24,*)
+         WRITE(24,*) "Continuum orbital wave function calculations has been &
+            performed."
+         WRITE(24, '(1X,A,I2,A2,A,I3,A,F15.10,A)') "Orbital ", NP(CO_ORBITAL),&
+            NH(CO_ORBITAL),"has been marked as continuum (kappa = ", NAK(NW), &
+            ", energy = ",E(NW)," hartree)"
+         IF (CO_ENERGY == 0.0D0) &
+            WRITE(24, '(1X,A,F15.10)') "Scattering length = ", CO_SL
+      END IF
+! PS END
+
       WRITE (24, 301)
       DO I = 1, NW
          WRITE (24, 302) NP(I),NH(I),E(I),PZ(I),GAMA(I),PF(2,I),QF(2,I), &
@@ -86,16 +100,14 @@
          13X,'p0',5X,'gamma',5X,'P(2)',7X,'Q(2)',3X,'Consistency',' MTP'/)
   302 FORMAT(1X,I2,A2,1X,1P,D17.10,1P,D11.3,0P,F6.2,1P,3(D11.3),I5)
 ! PS
-  303 FORMAT (/18X,'-3',14X,'-1',29X,'2',14x,'4',14x,'3',14x,'5',5X,'Generalised'     &
-              /'Subshell',4X,'<  r  >',8X,'<  r  >',8X,'<  r  >',8X,  &
-               '<  r  >',8X,'<  r  >',8X,'<  r  >',8X,'<  r  >',6X,'occupation'/)
-
+  303 FORMAT (/18X,'-3',14X,'-1',29X,'2',14x,'4',14x,'3',14x,'5',5X, &
+  'Generalised'/'Subshell',4X,'<  r  >',8X,'<  r  >',8X,'<  r  >',8X,&
+      '<  r  >',8X,'<  r  >',8X,'<  r  >',8X,'<  r  >',6X,'occupation'/)
+  304 FORMAT (1X,1I2,1A2,1X,1P,8D15.5)
 !  303 FORMAT (/18X,'-3',14X,'-1',29X,'2',14x,'4',5X,'Generalised'     &
 !               /'Subshell',4X,'<  r  >',8X,'<  r  >',8X,'<  r  >',8X,  &
 !                '<  r  >',8X,'<  r  >',6X,'occupation'/)
-
- !304 FORMAT (1X,1I2,1A2,1X,1P,6D15.5)
-  304 FORMAT (1X,1I2,1A2,1X,1P,8D15.5)
+!  304 FORMAT (1X,1I2,1A2,1X,1P,6D15.5)
 ! PS END
       RETURN
 !

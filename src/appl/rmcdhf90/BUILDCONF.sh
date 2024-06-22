@@ -62,6 +62,7 @@ co_getmax.f90
 co_normalization.f90
 co_save_to_file.f90
 co_scattering_length.f90
+co_add_polarization_potential.f90
 
 rscfvu.f90
 "

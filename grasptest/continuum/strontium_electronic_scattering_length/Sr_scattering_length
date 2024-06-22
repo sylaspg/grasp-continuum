@@ -1,0 +1,62 @@
+#!/bin/sh
+
+set -x
+
+###### Continuum state ######
+
+# Add one electron at the additional orbital - it will be treated as continuum electron.
+# Principal quantum number will be ignored, and kappa will be determined from the angular momentum.
+# E.g. 6s(1,*) means 1 electron of kappa = -1 (s-wave)
+# After adding that one electron, J = 1/2
+rcsfgenerate << S6
+*
+4
+5s(2,*)6s(1,*)
+
+6s
+1,1
+0
+n
+S6
+
+mv rcsf.out rcsf.inp
+
+rangular << S7
+y
+S7
+
+# Use saved rwf for bound, any other method for continuum orbital
+rwfnestimate << S8
+y
+1
+Sr.w
+*
+3
+*
+S8
+
+# Run rmcdhf for continuum wave function calculation.
+# Use non-default, user-entered parameters of polarization potential
+rmcdhf << S9
+n
+n
+y        ! Continuum orbital calculations
+-0.0     ! Continuum electron energy (hartree, negative)
+2        ! Polarization potential, manually entered parameters
+199.0    ! alpha_d
+119.0    ! cut-off^3
+0        ! alpha_q
+0        ! cut-off^5
+n        ! Normalization
+y
+n
+y
+1.0E-007
+5.0E-2
+8.0      ! Enable long Lin-log grid
+5000
+n
+999
+n
+1
+S9

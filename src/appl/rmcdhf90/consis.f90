@@ -35,20 +35,19 @@
 !
 !
       SCMEA = 0.0D00
-      MTP = MIN(MTP0,MF(J))
+! PS
+      IF (CO_CALCULATE  .AND. J == CO_ORBITAL) THEN
+! For continuum orbital, take all points as MTP
+         MTP = MAX(MTP0,MF(J))
+      ELSE
+         MTP = MIN(MTP0,MF(J))
+      END IF
+! PS END
       DO I = 1, MTP
          DELTAO = ABS(P(I)-PF(I,J)) + ABS(Q(I)-QF(I,J))
          SCMEA = DMAX1(DELTAO,SCMEA)
       END DO
-! PS
-!     SCNSTY(J) = SCMEA*SQRT(UCF(J))
-! Now some cheating...
-      IF (CO_CALCULATE .AND. J == CO_ORBITAL) THEN
-            SCNSTY(J) = 1.0D0
-      ELSE
-            SCNSTY(J) = SCMEA*SQRT(UCF(J))
-      END IF
-! PS END
-!
+      SCNSTY(J) = SCMEA*SQRT(UCF(J))
+
       RETURN
       END SUBROUTINE CONSIS

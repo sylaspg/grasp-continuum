@@ -24,6 +24,7 @@ SUBROUTINE co_save_to_file(J)
     CHARACTER(20), PARAMETER :: FNAME = "continuum.csp"
 
     OPEN(61,FILE=FNAME)
+! For gnuplot
     WRITE(61,*) 'plot "-" index  0 using 1:2 with lines'
     WRITE(61,*) '#     r                   P(r)                   Q(r)'
     DO i=1, MF(J)
@@ -31,7 +32,7 @@ SUBROUTINE co_save_to_file(J)
     END DO
     CLOSE(61)
 
-    PRINT*,"Continuum orbital saved to file ",FNAME
+    PRINT*,"Continuum orbital saved to '", TRIM(FNAME), "' file."
 
     RETURN
 

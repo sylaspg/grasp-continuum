@@ -154,6 +154,24 @@
       ENDIF
       WTAEV0 = 0.0
       dvdfirst = .false.
+
+! PS
+! Mark last orbital as a continuum one; it should be only one electron there
+      IF (CO_CALCULATE) THEN
+         CO_ORBITAL = NW
+         IF (CO_CALCULATE .AND. UCF(CO_ORBITAL) /= 1) THEN
+            PRINT*
+            PRINT*, "RMCDHF: In continuum calculations ",&
+                    "only one electron at the outermost orbital is allowed."
+            STOP "*** Program execution terminated. ***"
+         END IF
+         PRINT*
+         WRITE(*,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital", NP(NW), NH(NW), &
+            "(no.",CO_ORBITAL,") marked as continuum (kappa = ", NAK(NW), &
+            ", energy = ",CO_ENERGY," hartree)"
+      END IF
+! PS END
+
       DO NIT = 1, NSCF
          IF (MYID == 0) WRITE (*, 301) NIT
 
@@ -161,23 +179,6 @@
 !   the Lagrange multiplier
 
          CALL SETLAG (EOL)
-
-! PS
-! Mark last orbital as a continuum one. There should be only one electron there.
-         IF (CO_CALCULATE) THEN
-            CO_ORBITAL = NW
-            IF (CO_CALCULATE .AND. UCF(CO_ORBITAL) /= 1) THEN
-               PRINT*
-               PRINT*, "RMCDHF: In continuum calculations ",&
-                       "only one electron at the outermost orbital is allowed."
-               STOP "Program execution terminated."
-            END IF
-            PRINT*
-            PRINT*,"Orbital ", NP(NW), NH(NW), "(no. ",CO_ORBITAL,") marked as continuum."
-            PRINT*," kappa = ",NAK(NW)
-            PRINT*," energy = ",E(NW)," hartree"
-         END IF
-! PS END
 
 !   Improve all orbitals in turn
 
@@ -231,16 +232,6 @@
 !   in subroutine improv. For AL calculation, orthst is false.
          IF (.NOT.ORTHST) CALL ORTHSC
 
-! PS
-! Perform normalization of the continuum orbital
-! and calculate scattering length if electron energy = 0
-         IF (CO_CALCULATE) THEN
-            IF (CO_NORMALIZE .AND. CO_ENERGY /= 0.0D0) CALL co_normalization(CO_ORBITAL)
-            IF (CO_ENERGY == 0.0D0) CALL co_scattering_length(CO_ORBITAL)
-            CALL co_save_to_file(CO_ORBITAL)
-         END IF
-! PS END
-
 !   Write the subshell radial wavefunctions to the .rwf file
 
          IF (MYID == 0) CALL ORBOUT (RWFFILE2)
@@ -276,6 +267,22 @@
       IF (MYID == 0) THEN
          !CLOSE (23)     ! The .rwf file
          CLOSE(25)                               ! The .mix file
+
+! PS
+         IF (CO_CALCULATE) THEN
+            PRINT*
+            PRINT*,"Continuum orbital wave function calculations has been &
+                 performed."
+            WRITE(*,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital",NP(NW),NH(NW),&
+              "(no.",CO_ORBITAL,") was marked as continuum (kappa = ",NAK(NW),&
+              ", energy = ",E(NW)," hartree)"
+            IF (CO_NORMALIZE .AND. CO_ENERGY /= 0.0D0) &
+            CALL co_normalization(CO_ORBITAL)
+            IF (CO_ENERGY == 0.0D0) CALL co_scattering_length(CO_ORBITAL)
+            CALL co_save_to_file(CO_ORBITAL)
+         END IF
+! PS END
+
 !
 !   Complete the summary - moved from rscf92 for easier alloc/dalloc
 !

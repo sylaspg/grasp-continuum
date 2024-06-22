@@ -74,9 +74,6 @@
       INTEGER :: I, J, IEND, IBEG, LENTH, NSUBS, LOC
       REAL(DOUBLE) :: ODAMPU, CDAMPU
       LOGICAL :: YES
-! PS
-      LOGICAL :: co_file_exists
-! PS END
       CHARACTER :: RECORD*80, CNUM*20
 !-----------------------------------------------
 !
@@ -104,6 +101,68 @@
 !
       ACCY = H**6
       IF (NDEF /= 0) THEN
+
+! PS
+! Input for continuum orbital wave function calculations
+         WRITE (istde,*)
+         WRITE (istde,'(A)',ADVANCE='NO') &
+            'Perform continuum wave function calculations? (y/n) '
+         YES = GETYN ()
+         IF (YES) THEN
+            CO_CALCULATE = .TRUE.
+            WRITE (istde,*) 'Continuum electron energy (hartree, negative):'
+            READ (5, *) CO_ENERGY
+            WRITE (istde,'(A)') "Include polarization potential? (0/1/2/3)"
+            WRITE (istde,'(A)') "     0 -- No"
+            WRITE (istde,'(A)') &
+               "     1 -- Yes, use model potential with default parameters"
+            WRITE (istde,'(A)') &
+               "     2 -- Yes, use model potential with manually entered &
+               parameters"
+            WRITE (istde,'(A)') &
+               "     3 -- Yes, use numerical data from 'vpol' file"
+            READ (5, *) CO_ANSWER
+            SELECT CASE(CO_ANSWER)
+               CASE (0)
+                  CO_INCLUDE_POLARIZATION = .FALSE.
+               CASE (1)
+                  CO_INCLUDE_POLARIZATION = .TRUE.
+                  CO_POLARIZATION_AUTO = .TRUE.
+               CASE (2)
+                  CO_INCLUDE_POLARIZATION = .TRUE.
+                  CO_POLARIZATION_MANUAL = .TRUE.
+                  WRITE (istde,*) "Enter dipole polarizability, &
+                                       alpha_d = "
+                  READ (5, *) CO_ALPHA_D
+                  WRITE (istde,*) "Enter (positive) cut-off parameter, &
+                                       <r0^3> = "
+                  READ (5, *) CO_R0_3
+                  WRITE (istde,*) "Enter quadrupole polarizability, &
+                                       alpha_q = "
+                  READ (5, *) CO_ALPHA_Q
+                  WRITE (istde,*) "Enter (positive) cut-off parameter, &
+                                       <r0^5> = "
+                  READ (5, *) CO_R0_5
+               CASE (3)
+                  CO_INCLUDE_POLARIZATION = .TRUE.
+                  CO_POLARIZATION_FROM_FILE = .TRUE.
+               CASE DEFAULT
+                  CO_INCLUDE_POLARIZATION = .FALSE.
+            END SELECT
+            CO_NORMALIZE = .FALSE.
+            WRITE (istde,'(A)',ADVANCE='NO') &
+               'Normalize continuum wave function? (y/n) '
+            YES = GETYN ()
+            IF (YES) CO_NORMALIZE = .TRUE.
+            WRITE (istde,*)
+            WRITE (istde,*)
+            WRITE (istde,*) "Using a linear-logarithimic grid (HP > 0) &
+              is *strongly* recommended in continuum orbital calculations."
+              WRITE (istde,*) "Please consider to change the default grid &
+              parameters in the next step."
+            WRITE (istde,*)
+         ENDIF
+! PS END
 
          WRITE (ISTDE,'(A)',ADVANCE='NO')'Change the default speed of',&
             ' light or radial grid parameters?  (y/n) '
@@ -154,7 +213,7 @@
 !b Revised ACCY
                WRITE (istde,*) 'Revised ACCY = ', ACCY
          ENDIF
-      ENDIF
+   ENDIF
 !
 !   Set up the coefficients for the numerical procedures
 !
@@ -193,6 +252,7 @@
       IF (DIAG) THEN
          EOL = .FALSE.
          CALL GETALD                             ! (E)AL type calculation,
+
                               ! H(DC) will not be diagonalised
       ELSE IF (LFORDR) THEN
          EOL = .TRUE.
@@ -224,33 +284,7 @@
       ELSE
          YES = .FALSE.
       ENDIF
-
-! PS
-! Read input data for continuum electron calculations
-! TODO: (Maybe) introduce interactive questions instead
-      INQUIRE(FILE="continuum.inp", EXIST=co_file_exists)
-      IF (co_file_exists) THEN
-         PRINT*, "Reading the input file for continuum calculations..."
-         OPEN(632, file="continuum.inp", FORM="FORMATTED")
-         READ(632,'(A)') CO_DUMMY
-         READ(632,*) CO_CALCULATE
-         READ(632,'(A)') CO_DUMMY
-         READ(632,*) CO_ENERGY
-         READ(632,'(A)') CO_DUMMY
-         READ(632,*) CO_NORMALIZE
-         READ(632,'(A)') CO_DUMMY
-         READ(632,*) CO_INCLUDE_POLARIZATION
-         PRINT*,"Perform continuum orbital calculations = ", CO_CALCULATE
-         PRINT*,"Continuum electron energy (hartree) = ", CO_ENERGY
-         PRINT*,"Continuum electron normalization = ", CO_NORMALIZE
-         PRINT*,"Include polarization potential = ", CO_INCLUDE_POLARIZATION
-         CLOSE(632)
-         PRINT*, "Read complete."
-      ELSE
-         CO_CALCULATE = .FALSE.
-      ENDIF
-! PS END
-
+!
       IF (.NOT.YES) RETURN
 !=======================================================================
 ! From here to end, "other defaults" are handled. For simplicity
