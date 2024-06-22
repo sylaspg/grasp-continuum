@@ -21,7 +21,7 @@ This fork is completely neutral for 'normal' type of calculations (bound states 
 Only when calculations involving continuum orbital are requested (during execution of the `rmcdhf` program),
 the default flow changes. The only differences are listed below:
 - `rmcdhf`: number of points in the radial (NNNP) has been increased to 5000
-- `rmcdhf`: <$r^3$> and <$r^5> are also calculated for each orbital
+- `rmcdhf`: $\langle r^3\rangle$ and $\langle r^5\rangle$ are also calculated for each orbital
 - `rwfnplot`: generation of input file for the `gnuplot` plotting program has been added
 - `CMakeList.txt`: file has been reorganized, because
 in the original file flags introduced in the `CMakeList.user` are not applied correctly
@@ -63,19 +63,19 @@ The polarization potential coincides with dipole polarization at greater distanc
 but limited near the nucleus.
 For atoms, it is currently implemented in the following form:
 
-$V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{(r^3+<r_0^3>)^2}
--\frac{1}{2}\frac{\alpha_q r^4}{(r^5+<r_0^5>)^2}
+$V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{(r^3+\langle r_0^3\rangle)^2}
+-\frac{1}{2}\frac{\alpha_q r^4}{(r^5+\langle r_0^5\rangle)^2}
 $,
 
 where $\alpha_d$ and $\alpha_q$ represents the static dipole
 and quadrupole polarizability, respectively;
-<$r_0^3$> and <$r_0^5$> are the cut-off parameters.
+$\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ are the cut-off parameters.
 
 One possible source for atomic dipole polarizabilities is [3],
 except for Livermorium atom (Lv, atomic number 116).
 There is no single aggregate source for atomic quadrupole polarizabilities.
 
-For atoms, cut-offs <$r_0^3$> and <$r_0^5$> can be calculated
+For atoms, cut-offs $\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ can be calculated
 from bound states, assuming that $r_0$ is the radius
 of the outermost orbital of the target atom.
 
@@ -83,7 +83,7 @@ of the outermost orbital of the target atom.
 > Polarization potential can be also provided
 > in numerical form, which may be useful e.g. for ions.
 > It has to be provided in a text file named `vpol`,
->containing pairs of numbers 'r  Vpol(r)' written in lines, e.g.>
+>containing pairs of numbers 'r  Vpol(r)' written in lines, e.g.
 ```
 1.00000E-05 -4.10660E-07
 1.05127E-05 -4.31715E-07
@@ -185,11 +185,11 @@ CSF(s):
     - decide if polarization potential should be used.
       - 0 - do not use polarization potential
       - 1 - use model potential with default parameters:
-            $\alpha_d$ taken from [2], and cut-off <$r_0^3$> taken from bound state calculations
+            $\alpha_d$ taken from [2], and cut-off $\langle r_0^3\rangle$ taken from bound state calculations
             as the size of the outermost orbital; with that option the quadrupole term is omitted
       - 2 - use model potential with all parameters
             provided manually by the user; in turn:
-            $\alpha_d$, <$r_0^3$>, $\alpha_q$ and <$r_0^5$>
+            $\alpha_d$, $\langle r_0^3\rangle$, $\alpha_q$ and $\langle r_0^5\rangle$
       - 3 - use numerical potential from file named `vpol`
     - decide (_y_/_n_), if the calculated continuum wave function should be normalized
     - answer _y_ when asked _Change default speed of light or radial grid parameters?_
