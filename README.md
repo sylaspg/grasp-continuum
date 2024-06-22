@@ -63,8 +63,8 @@ The polarization potential coincides with dipole polarization at greater distanc
 but limited near the nucleus.
 For atoms, it is currently implemented in the following form:
 
-$V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{(r^3+\langle r_0^3\rangle)^2}
--\frac{1}{2}\frac{\alpha_q r^4}{(r^5+\langle r_0^5\rangle)^2}
+$V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{\left(r^3+\langle r_0^3\rangle\right)^2}
+-\frac{1}{2}\frac{\alpha_q r^4}{\left(r^5+\langle r_0^5\rangle\right)^2}
 $,
 
 where $\alpha_d$ and $\alpha_q$ represents the static dipole
@@ -76,7 +76,7 @@ except for Livermorium atom (Lv, atomic number 116).
 There is no single aggregate source for atomic quadrupole polarizabilities.
 
 For atoms, cut-offs $\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ can be calculated
-from bound states, assuming that $r_0$ is the radius
+from bound states, assuming that $\langle r_0\rangle$ is the radius
 of the outermost orbital of the target atom.
 
 >**Please note:**
@@ -156,9 +156,9 @@ Implemented and tested:
    and its quantum number kappa will be determined from the subshell designation.
    As an example, for electron-Argon scattering 'core' subshells are
    `1s 2s 2p- 2p 3s 3p- 3p`, and that additional electron may be provided
-   as `4s(1,i)`, which means 1 _inactive_ electron of kappa = -1 (s-wave), and J = 1/2.
-   Next, provide proper 2*J range (e.g. 1,1 if scattering from neutral atom)
-   and enter 0 as number of excitations.
+   as `4s(1,i)`, which stands for one _inactive_ electron of $\kappa = -1$ (s-wave), and $J = 1/2$.
+   Next, provide proper $2*J$ range (e.g. _1,1_ if scattering from neutral atom)
+   and enter _0_ as number of excitations.
 
 Example `rcsf.inp` file for electron-Argon scattering:
   ```
@@ -174,8 +174,8 @@ CSF(s):
 
 3. Run `rangular` as usual.
 4. Run `rwfnestimate`, use the previously calculated radial wave functions
-   as initial estimation for the 'core' orbitals (option 1 -- GRASP92 File),
-   and any onther method (2 -- 4) for estimation of the 'peel', continuum electron.
+   as initial estimation for the 'core' orbitals (option _1 -- GRASP92 File_),
+   and any onther method (options _2 - 4_) for initial estimation of the 'peel' continuum electron.
 5. Invoke `rmcdhf`, then
     - answer _n_ when asked _Default settings?_
     - answer _y_ when asked _Perform continuum wave function calculations?_
@@ -183,23 +183,23 @@ CSF(s):
     (should be negative according to convention used in GRASP,
     or zero for scattering length calculation)
     - decide if polarization potential should be used.
-      - 0 - do not use polarization potential
-      - 1 - use model potential with default parameters:
+      - _0_ - do not use polarization potential
+      - _1_ - use model potential with default parameters:
             $\alpha_d$ taken from [2], and cut-off $\langle r_0^3\rangle$ taken from bound state calculations
             as the size of the outermost orbital; with that option the quadrupole term is omitted
-      - 2 - use model potential with all parameters
+      - _2_ - use model potential with all parameters
             provided manually by the user; in turn:
             $\alpha_d$, $\langle r_0^3\rangle$, $\alpha_q$ and $\langle r_0^5\rangle$
-      - 3 - use numerical potential from file named `vpol`
+      - _3_ - use numerical potential from file named `vpol`
     - decide (_y_/_n_), if the calculated continuum wave function should be normalized
     - answer _y_ when asked _Change default speed of light or radial grid parameters?_
     - answer _y_ when asked _Revise default radial grid parameters?_
-    - enter new RNT and H values (firstly, they might be the same as defaults)
-    - enter new HP; use non-zero value to force the linearly-logarithmic grid,
+    - enter new _RNT_ and _H_ values (firstly, they might be the same as defaults)
+    - enter new _HP_; use non-zero value to force the linearly-logarithmic grid,
     which ensures adequate grid density far from the scattering centre;
-    1.0 or less is the good choice for a first try
-    - enter new N; in general, use as big number as possible to ensure as long grid as possible;
-    5000 is the default
+    _1.0_ or less is the good choice for a first try
+    - enter new _N_; in general, use as big number as possible to ensure as long grid as possible;
+    _5000_ is the default
 
       Answers to the other questions should be obvious to any GRASP user.
 
