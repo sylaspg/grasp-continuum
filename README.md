@@ -1,4 +1,5 @@
 # GRASP - The General-purpose Relativistic Atomic Structure Package
+# ... supplemented by continuum orbitals wave functions generation
 
 ![Tests][tests-badge]
 [![][doxygen-badge]][doxygen-url]
@@ -25,7 +26,7 @@ the default flow changes. The only differences are listed below:
 - `rwfnplot`: generation of input file for the `gnuplot` plotting program has been added
 - `CMakeList.txt`: file has been reorganized, because
 in the original file flags introduced in the `CMakeList.user` are not applied correctly
-- `CMakeList.user`: flag `-fallow-argument-mismatch` has been specified,
+- `CMakeList.user`: file is included in the repository, containing flag `-fallow-argument-mismatch`,
 to allow code compilation using recent versions of the GNU Fortran (`gfortran`) compiler
 
 All modifications in the original source code are clearly marked in the following way:
