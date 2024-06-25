@@ -131,13 +131,13 @@
                CASE (2)
                   CO_INCLUDE_POLARIZATION = .TRUE.
                   CO_POLARIZATION_MANUAL = .TRUE.
-                  WRITE (istde,*) "Enter dipole polarizability, &
+                  WRITE (istde,*) "Enter static dipole polarizability, &
                                        alpha_d = "
                   READ (5, *) CO_ALPHA_D
                   WRITE (istde,*) "Enter (positive) cut-off parameter, &
                                        <r0^3> = "
                   READ (5, *) CO_R0_3
-                  WRITE (istde,*) "Enter quadrupole polarizability, &
+                  WRITE (istde,*) "Enter static quadrupole polarizability, &
                                        alpha_q = "
                   READ (5, *) CO_ALPHA_Q
                   WRITE (istde,*) "Enter (positive) cut-off parameter, &

@@ -53,9 +53,10 @@ of the continuum electron wave function.
 If calculated wave function is to be coupled
 with the other function (e.g. the bound state),
 it should be normalized.
-For calculations of phases shifts and scattering lengths,
-normalization is not required.
 _Per energy_ continuum wave function normalization is described in [2].
+
+> **Please note:** For calculations of phases shifts and scattering lengths,
+> normalization is not required.
 
 #### Polarization potential
 
@@ -71,12 +72,12 @@ where $\alpha_d$ and $\alpha_q$ represents the static dipole
 and quadrupole polarizability, respectively;
 $\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ are the cut-off parameters.
 
-One possible source for atomic dipole polarizabilities is [3],
+One possible source for static dipole polarizabilities for atoms is [3],
 except for Livermorium atom (Lv, atomic number 116).
-There is no single aggregate source for atomic quadrupole polarizabilities.
+There is no single aggregate source for static quadrupole polarizabilities.
 
-For atoms, cut-offs $\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ can be calculated
-from bound states, assuming that $\langle r_0\rangle$ is the radius
+For atoms, cut-offs $\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ can be taken
+from bound states calculations, assuming that $\langle r_0\rangle$ is the radius
 of the outermost orbital of the target atom.
 
 >**Please note:**
@@ -186,9 +187,8 @@ CSF(s):
       - _0_ - do not use polarization potential
       - _1_ - use model potential with default parameters:
             $\alpha_d$ taken from [2], and cut-off $\langle r_0^3\rangle$ taken from bound state calculations
-            as the size of the outermost orbital; with that option the quadrupole term is omitted
-      - _2_ - use model potential with all parameters
-            provided manually by the user; in turn:
+            as the size of the outermost orbital; in that option the quadrupole term is omitted
+      - _2_ - use model potential with all parameters provided manually by the user; in turn:
             $\alpha_d$, $\langle r_0^3\rangle$, $\alpha_q$ and $\langle r_0^5\rangle$
       - _3_ - use numerical potential from file named `vpol`
     - decide (_y_/_n_), if the calculated continuum wave function should be normalized
@@ -224,9 +224,15 @@ and also in a text-formatted file `continuum.csp`.
 
 #### Electron-Argon elastic scattering
 
+Bound states estimation, continuum orbital wave function generation and calculation of scattering length;
+calculations with default and manually entered parameters of polarization potential.
+
 See `/grasptest/continuum/argon-electron_scattering` directory.
 
 #### Electronic scattering length of Strontium
+
+Calculation of scattering length with default parameters of polarization potential,
+for a given `.w` file with optimized bound states.
 
 See `/grasptest/continuum/strontium_electronic_scattering_length` directory.
 
