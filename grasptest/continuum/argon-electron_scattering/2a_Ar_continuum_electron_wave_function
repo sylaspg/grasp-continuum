@@ -39,6 +39,7 @@ Ar.w
 S3
 
 # Now run rmcdhf for continuum wave function calculation.
+# Use default parameters of polarization potential.
 # Grid should be long enough, and dense enough
 # to obtain "nice-looking" function.
 # Most important switches/answers are described below.

@@ -40,13 +40,18 @@ S3
 
 # Now run rmcdhf for scattering length calculations.
 # This is accomplished by forcing zero energy of the continuum electron.
+# Use manually entered parameters of polarization potential.
 # The further the grid extends from the nucleus, the better accuracy (in general).
 rmcdhf << S4
 n          ! Do not use default settings
 n
 y          ! Enable continuum orbital calculations
 0.0        ! Continuum electron energy (hartree, negative), zero for scattering length
-1          ! Include polarization potential with default parameters
+2          ! Include polarization potential with default parameters
+11.083     ! Static dipole polarizability
+7.76       ! <r0^3> cut-off
+0.14       ! Static quadrupole polarizability
+65.74      ! <r0^5> cut-off
 n          ! Do not normalize calculated continuum wave function
 y          ! Change defaut speed of light or radial grid parameters
 n

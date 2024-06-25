@@ -25,7 +25,7 @@ rangular << S7
 y
 S7
 
-# Use saved rwf for bound, any other method for continuum orbital
+# Use saved rwf for bound states, any other method for continuum orbital
 rwfnestimate << S8
 y
 1
@@ -42,11 +42,7 @@ n
 n
 y        ! Continuum orbital calculations
 -0.0     ! Continuum electron energy (hartree, negative)
-2        ! Polarization potential, manually entered parameters
-199.0    ! alpha_d
-119.0    ! cut-off^3
-0        ! alpha_q
-0        ! cut-off^5
+1        ! Polarization potential, manually entered parameters
 n        ! Normalization
 y
 n
