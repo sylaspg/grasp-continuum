@@ -7,7 +7,6 @@
 !/lib/.gitkeep
 
 # Ignore user build configuration files
-CMakeLists.user
 Make.user
 
 # Ignore generated CMake files
