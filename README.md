@@ -1,5 +1,5 @@
 # GRASP - The General-purpose Relativistic Atomic Structure Package
-# ... supplemented by continuum orbitals wave functions generation
+# GRASPC - GRASP supplemented by continuum orbitals wave functions generation
 
 ![Tests][tests-badge]
 [![][doxygen-badge]][doxygen-url]
