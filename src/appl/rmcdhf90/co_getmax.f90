@@ -8,7 +8,7 @@ SUBROUTINE co_getmax(x,y,n,xmax,ymax)
 !   Arguments:                                                         *
 !                                                                      *
 !           x    : (input) Table with the x-values to interpolate      *
-!           y    : (input) Table with the y-values to interpoate       *
+!           y    : (input) Table with the y-values to interpolate      *
 !           n    : (input) Size of the x and y tables                  *
 !           xmax : (output) The X value of the local maximum           *
 !           ymax : (output) The Y value of the local maximum           *
@@ -16,7 +16,7 @@ SUBROUTINE co_getmax(x,y,n,xmax,ymax)
 !   Call(s) to: [LIB92]: INTERP                                        *
 !                                                                      *
 !   Paweł Syty                                                         *
-!                                           Last update: 25 Apr 2024   *
+!                                                         April 2024   *
 !                                                                      *
 !***********************************************************************
     USE vast_kind_param, ONLY: DOUBLE
@@ -27,9 +27,9 @@ SUBROUTINE co_getmax(x,y,n,xmax,ymax)
     REAL(DOUBLE), DIMENSION(1:n), INTENT(IN) :: x, y
     REAL(DOUBLE), INTENT(OUT)                :: xmax, ymax
     REAL(DOUBLE) :: x1, x2, x3, dx, y1, y2, y3
-    REAL(DOUBLE), PARAMETER :: accy = 1.0D-3
+    REAL(DOUBLE), PARAMETER :: accy = 1.0D-5
 
-    dx = (x(n) - x(1)) / 1000
+    dx = (x(n) - x(1)) * accy
     x1 = x(1) - dx/2
 
     DO
@@ -43,8 +43,7 @@ SUBROUTINE co_getmax(x,y,n,xmax,ymax)
             xmax = x2
             ymax = y2
             return
-        ELSE IF (x1 < x(1)  .or.  x3 < x(1)  .OR. &
-                 x1 > x(n)  .or.  x3 > x(n)) THEN
+        ELSE IF (x1 < x(1)  .or.  x3 < x(1)  .OR. x1 > x(n)  .or.  x3 > x(n)) THEN
             xmax = 0
             ymax = 0 ! Fail
             RETURN

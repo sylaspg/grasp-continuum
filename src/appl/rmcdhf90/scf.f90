@@ -271,14 +271,14 @@
 ! PS
          IF (CO_CALCULATE) THEN
             PRINT*
-            PRINT*,"Continuum orbital wave function calculations has been &
+            PRINT*,"Continuum orbital wave function calculations have been &
                  performed."
             WRITE(*,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital",NP(NW),NH(NW),&
               "(no.",CO_ORBITAL,") was marked as continuum (kappa = ",NAK(NW),&
               ", energy = ",E(NW)," hartree)"
-            IF (CO_NORMALIZE .AND. CO_ENERGY /= 0.0D0) &
-            CALL co_normalization(CO_ORBITAL)
-            IF (CO_ENERGY == 0.0D0) CALL co_scattering_length(CO_ORBITAL)
+            IF (CO_NORMALIZE) CALL co_normalization(CO_ORBITAL)
+            CALL co_phase_shift(CO_ORBITAL)
+            CALL co_scattering_length(CO_ORBITAL)
             CALL co_save_to_file(CO_ORBITAL)
          END IF
 ! PS END

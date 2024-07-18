@@ -2,20 +2,19 @@
 
 set -x
 
-###### 2. Continuum state ######
+###### 3. Continuum state: zero-energy wave for scattering length calculations ######
 
-# Add one electron at the additional orbital to CSFs list.
-# It will be treated as continuum electron during the SCF procedure.
-# Principal quantum number will be ignored,
-# kappa will be determined from the subshell designation.
-# E.g. 4s(1,*) means 1 electron of kappa = -1 (s-wave), J = 1/2
+# Add one additional orbital with just one electron to CSFs list.
+# Since we would like to calculate scattering length,
+# we add the s-wave electron, coupled to final J = 1/2,
+# giving kappa = -1 (principal quantum number is ignored).
 rcsfgenerate << S1
 *
 3         ! Argon
-4s(1,*)   ! Additional electron
+4s(1,i)   ! Additional s-wave electron
 
 4s
-1,1
+1,1       ! J=1/2 => kappa = -1
 0         ! No excitations
 n
 S1
@@ -34,7 +33,7 @@ y
 1
 Ar.w
 *
-2
+5
 *
 S3
 

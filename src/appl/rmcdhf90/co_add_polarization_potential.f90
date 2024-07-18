@@ -5,18 +5,18 @@ SUBROUTINE co_add_polarization_potential()
 !   Adds polarization potential to the direct potential.               *
 !   The polarization potential can be either:                          *
 !   - modeled as                                                       *
-!       Vpol(R) = -0.5 * ALPHA_D * R**2 / (R**3 + <R^3>)**2 -          *
-!                 -0.5 * ALPHA_Q * R**4 / (R**5 + <R^5>)**2 -          *
+!       VPOL(R) = -0.5 * ALPHA_D * R**2 / (R**3 + <R^3>)**2 -          *
+!                  0.5 * ALPHA_Q * R**4 / (R**5 + <R^5>)**2            *
 !                                                                      *
 !   - read from a text 'vpol' file in format                           *
-!       r1 vpol(r1)                                                    *
-!       r2 vpol(r1)                                                    *
+!       R1 VPOL(R1)                                                    *
+!       R2 VPOL(R2)                                                    *
 !         ...                                                          *
 !                                                                      *
 !   Call(s) to: [LIB92] RINT, INTERP                                   *
 !                                                                      *
 !   Paweł Syty                                                         *
-!                                           Last update: 22 Jun 2024   *
+!                                                          June 2024   *
 !                                                                      *
 !***********************************************************************
 
@@ -37,14 +37,14 @@ SUBROUTINE co_add_polarization_potential()
     LOGICAL            :: vpol_file_exists = .FALSE.
 
     IF (CO_POLARIZATION_FROM_FILE) THEN
+
         INQUIRE (FILE=vpol_file, EXIST=vpol_file_exists)
 
-! Try to read potential from file
+        ! Try to read potential from file
         IF (vpol_file_exists) THEN
-            PRINT*, "Include polarization potential: read from '", &
-                        TRIM(vpol_file), "' file."
+            PRINT*, "Include polarization potential: read from '", TRIM(vpol_file), "' file."
 
-! Test for number of datapoints of numerical potential
+            ! Test for number of datapoints of numerical potential
             n_vpol = 0
             OPEN(76, FILE=vpol_file, FORM="FORMATTED")
             DO
@@ -53,7 +53,7 @@ SUBROUTINE co_add_polarization_potential()
             END DO
             10 CLOSE(76)
 
-! Read data
+            ! Read data
             OPEN(UNIT=76, FILE=vpol_file, FORM="FORMATTED")
 
             IF (.NOT. ALLOCATED(rpol)) ALLOCATE(rpol(1:n_vpol))
@@ -81,10 +81,10 @@ SUBROUTINE co_add_polarization_potential()
     END IF
 
     IF (CO_POLARIZATION_AUTO) THEN
-! Use model potential
 
-! Take dipole polarizabilities CO_ALPHA_D from
-! P. Schwerdtfeger and J.K. Nagle, Molecular Physics_ 117 9-12 (2019)
+        ! Use model potential
+        ! Take dipole polarizabilities CO_ALPHA_D from
+        ! P. Schwerdtfeger and J.K. Nagle, Molecular Physics_ 117 9-12 (2019)
         SELECT CASE (INT(Z))
 
         CASE (1) ! H
@@ -318,11 +318,10 @@ SUBROUTINE co_add_polarization_potential()
         CASE (115) ! Mc
             CO_ALPHA_D = 71.0D0
         CASE (116) ! Lv
-! No data for Lv, 116
+            ! No data for Lv, 116
             CO_ALPHA_D = 0.0
             CO_INCLUDE_POLARIZATION = .FALSE.
-            PRINT*,"No dipole polarizability is known for Lv, polarization &
-                    potential will be disabled."
+            PRINT*,"No dipole polarizability is known for Lv, polarization potential will not be included."
         CASE (117) ! Ts
             CO_ALPHA_D = 76.0D0
         CASE (118) ! Oganesson
@@ -330,23 +329,20 @@ SUBROUTINE co_add_polarization_potential()
         CASE DEFAULT
             CO_ALPHA_D = 0.0
             CO_INCLUDE_POLARIZATION = .FALSE.
-            PRINT*,"No dipole polarization is found for the element, &
-                    polarization potential will be disabled."
+            PRINT*,"No dipole polarization is found for the element, polarization potential will not be included."
         END SELECT
 
-! Take cut-off from bound calculations (as size of the outermost bound orbital)
+        ! Take cut-off from bound calculations (as size of the outermost bound orbital)
         CO_R0_3 = RINT(CO_ORBITAL-1,CO_ORBITAL-1, 3)
-        PRINT*, "  <R0^3> is taken from size of the ", &
-                    NP(CO_ORBITAL-1), NH(CO_ORBITAL-1), "orbital"
+        PRINT*, "  <R0^3> is taken from size of the ", NP(CO_ORBITAL-1), NH(CO_ORBITAL-1), "orbital"
 
-! In auto mode, there are no quadrupole terms available, so setting
-! CO_ALPHA_Q and CO_R0_5 is omitted (they defaults to zero)
+    ! In auto mode, there are no quadrupole terms available, so setting
+    ! CO_ALPHA_Q and CO_R0_5 is omitted (they defaults to zero)
 
     END IF
 
     IF (CO_POLARIZATION_AUTO .OR. CO_POLARIZATION_MANUAL) THEN
-        PRINT*,"Include model polarization potential, alpha_d = ", &
-                CO_ALPHA_D, ", <R0^3> = ", CO_R0_3
+        PRINT*,"Include model polarization potential, alpha_d = ", CO_ALPHA_D, ", <R0^3> = ", CO_R0_3
         CO_VPOL(:N) = -0.5 * CO_ALPHA_D * R(:N)**2 / (R(:N)**3 + CO_R0_3)**2
 
         IF (CO_ALPHA_Q /= 0 .AND. CO_R0_5 /= 0) THEN
@@ -358,7 +354,7 @@ SUBROUTINE co_add_polarization_potential()
 
     END IF
 
-! Add polarizaton potential to the direct one
+    ! Add polarizaton potential to the direct one
     YP(:N) = YP(:N) - CO_VPOL(:N) * R(:N)
 
 END SUBROUTINE co_add_polarization_potential

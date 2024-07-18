@@ -3,11 +3,11 @@
 set -x
 
 ###### 1. Bound states ######
+
+# This is only a trivial example (DF) for argon atom.
 # If you already have optimized radial wave functions
 # for bound states (together with the isodata file),
-# they can be used directly in the second step.
-# Below only a trivial example (DF) is demonstrated
-# for Argon atom.
+# they can be directly used in the second step.
 
 # Nucleus
 rnucleus << S1

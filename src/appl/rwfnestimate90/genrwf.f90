@@ -111,9 +111,15 @@
          WRITE (ISTDE, *) '    2 -- Thomas-Fermi'
          WRITE (ISTDE, *) '    3 -- Screened Hydrogenic'
          WRITE (ISTDE, *) '    4 -- Screened Hydrogenic [custom Z]'
+! PS
+         WRITE (ISTDE, *) '    5 -- Continuum orbital'
+! PS END
 
          READ (ISTDI, *) NRADIAL
-         IF (NRADIAL<1 .OR. NRADIAL>4) THEN
+! PS
+         IF (NRADIAL<1 .OR. NRADIAL>5) THEN
+         ! IF (NRADIAL<1 .OR. NRADIAL>4) THEN
+! PS END
             WRITE (ISTDE, *) NRADIAL, 'is not a valid choice, redo'
             GO TO 234
          ENDIF
@@ -145,6 +151,10 @@
             CALL FRMHYD (INDEX, NSUBS, MODIFY,NRADIAL)
          ELSE IF (NRADIAL == 4) THEN
             CALL FRMHYD (INDEX, NSUBS, MODIFY,NRADIAL)
+!PS
+         ELSE IF (NRADIAL == 5) THEN
+            CALL co_initrwf (INDEX, NSUBS)
+!PS END
          ENDIF
 
          CALL PRTREM (ALL)

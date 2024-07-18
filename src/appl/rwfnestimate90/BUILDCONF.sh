@@ -18,6 +18,7 @@ summry.f90 summry_I.f90
 wrtrwf.f90 wrtrwf_I.f90
 genrwf.f90 genrwf_I.f90
 getinfo.f90 getinf_I.f90 # subroutine GETINF, implementation in getinfo.f90
+co_initrwf.f90
 erwf.f90
 "
 generate-makefile > ${MAKEFILE}

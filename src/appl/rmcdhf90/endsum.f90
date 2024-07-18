@@ -50,12 +50,27 @@
       IF (CO_CALCULATE) THEN
          WRITE(24,*)
          WRITE(24,*) "Continuum orbital wave function calculations has been &
-            performed."
+                      performed."
          WRITE(24, '(1X,A,I2,A2,A,I3,A,F15.10,A)') "Orbital ", NP(CO_ORBITAL),&
             NH(CO_ORBITAL),"has been marked as continuum (kappa = ", NAK(NW), &
-            ", energy = ",E(NW)," hartree)"
-         IF (CO_ENERGY == 0.0D0) &
+                           ", energy = ",E(NW)," hartree)"
+         IF (CO_ENERGY == 0.0D0) THEN
             WRITE(24, '(1X,A,F15.10)') "Scattering length = ", CO_SL
+         ELSE
+            IF (.NOT. CO_GRID_TOO_SHORT) THEN
+               IF (CO_PS /= CO_PS_SHIFTED) THEN
+                  WRITE(24, '(1X,A,F15.12,A,F15.12)') "Phase shift = ", CO_PS, &
+                                                      " = ",CO_PS_SHIFTED
+               ELSE
+                  WRITE(24, '(1X,A,F15.10)') "Phase shift = ", CO_PS
+               END IF
+               WRITE(24, '(1X,A,F15.12,A)') "Scattering length = ", &
+                    CO_SL, " (estimation only - non-zero energy)"
+            ELSE
+               WRITE(24, '(1X,A)') "*** Warning: Extend the radial grid to allow &
+                                for phase shift calculations ***"
+            END IF
+         END IF
       END IF
 ! PS END
 

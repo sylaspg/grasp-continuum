@@ -13,7 +13,7 @@ SUBROUTINE co_normalization(J)
 !   Call(s) to: [RMCDH90]: co_getmax                                   *
 !                                                                      *
 !   Paweł Syty                                                         *
-!                                           Last update: 19 Apr 2019   *
+!                                                         April 2019   *
 !                                                                      *
 !***********************************************************************
 
@@ -26,32 +26,35 @@ SUBROUTINE co_normalization(J)
     IMPLICIT none
 
     INTEGER, INTENT(in)  :: J
-    INTEGER :: i, i_mtp_max, mfj
-    REAL(DOUBLE) :: e_rydbergs, r0, new_amplitude, old_amplitude, factor
 
-    REAL (DOUBLE), PARAMETER :: PI = 4.0D00*ATAN(1.0D00)
+    INTEGER :: i, i_max, mfj
+    REAL(DOUBLE) :: e_rydbergs, r0, new_amplitude, old_amplitude, factor
+    REAL(DOUBLE), PARAMETER :: PI = 4.0D0*ATAN(1.0D0)
+
+    IF (CO_ENERGY == 0) THEN
+        PRINT*,"*** Skipping normalization of continuum wave function (energy = 0)"
+        RETURN
+    END IF
 
     mfj = MF(J)
+
     ! Determine the last maximum of the continuum wave function
-    i_mtp_max = -1
+    i_max = -1
     DO i = mfj-4, 1, -1
-        IF (PF(i-1, CO_ORBITAL) < PF(i, CO_ORBITAL)  .AND.  &
-            PF(i+1, CO_ORBITAL) < PF(i, CO_ORBITAL))  THEN
-            i_mtp_max = i
+        IF (PF(i-1, J) < PF(i, J) .AND. PF(i+1, J) < PF(i, J))  THEN
+            i_max = i
             EXIT
         END IF
     END DO
 
-    IF (i_mtp_max > 0) THEN
+    IF (i_max > 0) THEN
 
         e_rydbergs = -CO_ENERGY * 2  ! Hartree to Rydbergs
 
-        CALL co_getmax(R(i_mtp_max-2:i_mtp_max+2), &
-            PF(i_mtp_max-2:i_mtp_max+2, CO_ORBITAL), 5, r0, old_amplitude)
+        CALL co_getmax(R(i_max-4:i_max+4), PF(i_max-4:i_max+4, J), 9, r0, old_amplitude)
 
         IF (r0 == 0 .AND. old_amplitude == 0) THEN
-            PRINT*,"Skipping normalization of continuum wave function  (&
-              found no maximum)"
+            PRINT*,"Skipping normalization of continuum wave function  (no maximum)"
             RETURN
         ENDIF
 
@@ -59,11 +62,12 @@ SUBROUTINE co_normalization(J)
         new_amplitude = PI**(-0.5) * e_rydbergs**(-0.25)
         factor = new_amplitude / old_amplitude
         PRINT*, "Performing normalization of the continuum wave function."
-        PF(:, CO_ORBITAL) = PF(:, CO_ORBITAL) * factor
-        QF(:, CO_ORBITAL) = QF(:, CO_ORBITAL) * factor
+        PF(:, J) = PF(:, J) * factor
+        QF(:, J) = QF(:, J) * factor
     ELSE
-        PRINT*,"Skipping normalization of continuum wave function (&
-        found no maximum)"
-ENDIF
+
+        PRINT*,"*** Skipping normalization of continuum wave function (no maximum)"
+
+    ENDIF
 
 END SUBROUTINE co_normalization

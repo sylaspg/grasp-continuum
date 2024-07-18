@@ -115,7 +115,7 @@
             WRITE (istde,'(A)') "Include polarization potential? (0/1/2/3)"
             WRITE (istde,'(A)') "     0 -- No"
             WRITE (istde,'(A)') &
-               "     1 -- Yes, use model potential with default parameters"
+               "     1 -- Yes, use model potential with default parameters (dipole term only)"
             WRITE (istde,'(A)') &
                "     2 -- Yes, use model potential with manually entered &
                parameters"

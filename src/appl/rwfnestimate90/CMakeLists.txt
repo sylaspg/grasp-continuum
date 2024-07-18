@@ -31,6 +31,7 @@ add_executable(rwfnestimate
     genrwf_I.f90
     getinfo.f90
     getinf_I.f90
+    co_initrwf.f90
     erwf.f90
 )
 target_link_libraries_Fortran(rwfnestimate PUBLIC rang90 9290 mod)
