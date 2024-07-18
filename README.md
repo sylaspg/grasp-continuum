@@ -46,8 +46,9 @@ and one electron is from the continuum spectra, with given (positive) energy.
 To obtain the large and small components of the continuum electron wave function,
 the Dirac-Hartree-Fock equations
 
-$\big(\frac{\textrm{d}}{\textrm{d}r}+\frac{\kappa}{r}\big)P_{\kappa\epsilon}=\big(\frac{2}{\alpha}+\alpha(\epsilon-V-V_{pol})\big)Q_{\kappa\epsilon}-X^{(Q)}\\
-\big(\frac{\textrm{d}}{\textrm{d}r}-\frac{\kappa}{r}\big)Q_{\kappa\epsilon}=-\alpha\big(\epsilon-V-V_{pol}\big)P_{\kappa\epsilon}+X^{(P)}$
+$\big(\frac{\textrm{d}}{\textrm{d}r}+\frac{\kappa}{r}\big)P_{\kappa\epsilon}=\big(\frac{2}{\alpha}+\alpha(\epsilon-V-V_{pol})\big)Q_{\kappa\epsilon}-X^{(Q)}$
+
+$\big(\frac{\textrm{d}}{\textrm{d}r}-\frac{\kappa}{r}\big)Q_{\kappa\epsilon}=-\alpha\big(\epsilon-V-V_{pol}\big)P_{\kappa\epsilon}+X^{(P)}$
 
 are being solved using the _outward_ integration method implemented in GRASP. In the above equations,
 $\alpha$ is the fine structure constant,
@@ -111,7 +112,7 @@ large $r$ [1]:
 
 $P_\kappa(r)/r = j_l(kr)\cos(\delta_l) - n_l(kr)\sin(\delta_l)$,
 
-where $j_l(kr)$ and $n_l(kr)$ are the Bessel spherical functions
+where $j_l(kr)$ and $n_l(kr)$ are the spherical Bessel functions
 of the first and the second kind, respectively.
 
 >**Please note:**
@@ -217,7 +218,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
     >   - `4d(1,i)`, coupled to $J=3/2$ means _d_-wave electron of $\kappa=2$
     >   - `4d(1,i)`, coupled to $J=5/2$ means _d_-wave electron of $\kappa=-3$, etc.
 
-   Remember, that $J$ value should be provided as $[2*J, 2*J]$ range (e.g. _1,1_ for $J=1/2$), and to provide _0_ as the number of excitations.
+   Remember, that $J$ value should be provided as $(2*J, 2*J)$ range (e.g. _1,1_ for $J=1/2$), and to provide _0_ as the number of excitations.
 
     Example `rcsf.inp` file for electron-argon scattering (_s_-wave):
   ```
