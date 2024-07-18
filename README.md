@@ -40,9 +40,9 @@ All modifications in the original source files are clearly marked in the followi
 
 The basics of the relativistic multiconfiguration Dirac-Hartree-Fock method (**RMCDHF**)
 applied to scattering are described in [1].
-In short, scattering system is constructed as $N+1$ electron system,
+In short, the scattering system is constructed as $N+1$ electron system,
 where $N$ electrons are bound (with discrete, negative energy levels),
-and one electron is from the continuum spectra, with given (positive) energy $\epsilon$ and quantum number $\kappa$.
+and one electron is from the continuum spectrum, with given (positive) energy $\epsilon$ and quantum number $\kappa$.
 
 To obtain the large $P_{\kappa\epsilon}(r)$ and small $Q_{\kappa\epsilon}(r)$ components of the continuum orbitals,
 the Dirac-Hartree-Fock equations
@@ -68,13 +68,13 @@ it should be normalized first.
 Currently implemented _per energy_ continuum wave function normalization
 is described in [3].
 
-> **Please note:** For calculations of phases shifts and scattering lengths,
+> **Please note:** For calculations of phase shifts and scattering lengths,
 > normalization is usually not required.
 
 ### Polarization potential
 
 The polarization potential coincides with dipole polarization at greater distances
-but limited near the nucleus.
+but is limited near the nucleus.
 It is currently modeled and implemented in the following form:
 
 $V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{\left(r^3+\langle r_0^3\rangle\right)^2}
@@ -84,7 +84,7 @@ where $\alpha_d$ and $\alpha_q$ represents the static dipole
 and quadrupole polarizability, respectively;
 $\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ are the cut-off parameters.
 
-For atoms, one possible source for static dipole polarizabilities for is [4]
+For atoms, one possible source for static dipole polarizabilities is [4]
 (except for Livermorium atom, atomic number 116).
 There is no single aggregate source for static quadrupole polarizabilities.
 
@@ -118,7 +118,7 @@ Orbital angular momentum quantum number $l$ is related to $\kappa$ such that $\k
 Therefore, for the $l$-th partial wave (except the $l=0$ case) we obtain two phase shifts, sometimes referred to $\delta_l^+$ and $\delta_l^-$.
 
 >**Please note:**
-> To correctly determine the phase shift, continuum orbital
+> To correctly determine the phase shift, the continuum orbital
 > has to be calculated far enough from the origin,
 > to ensure that all of the potentials can be neglected.
 
@@ -177,6 +177,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
   - `rwfnestimate` Added: Dedicated method for initial estimation of the radial wave function for continuum electron
   - `grasptest/continuum` Added: new example for electron-argon scattering (_d_-wave calculation)
   - `README` Updated: most sections, the most important updates for _User guide_ and _Theoretical background_
+  - `rmcdhf` Now, the energy of the continuum electron should be entered as a positive value (or zero)
   - Several minor code and test-cases improvements
 
 - **2024-06-25** (Initial release)
@@ -197,7 +198,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
    in the simplest case), or just take nuclear data (`isodata`)
    and radial wave functions (`rwfn.out` / `.w`) files from any previous calculations.
 
-   This fork may be also used for that calculations,
+   This fork may be also used for that calculation,
    since it works _exactly_ as the original GRASP for bound states.
 
     > **Please note:**
@@ -208,7 +209,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
 2. By invoking `rcsfgenerate`, create a special `rcsf.inp` file with only one CSF,
    where 'core' is the configuration of the target atom or ion,
    and 'peel' consists of _one_ additional _inactive_ electron.
-   This electron will be treated as continuum one;  its principal quantum number will be ignored,
+   This electron will be treated as a continuum one;  its principal quantum number will be ignored,
    and its quantum number $\kappa$ will be determined from the subshell designation
    and final $J$ value, resulting from coupling with the core.
     > **Examples for argon-electron scattering:**
@@ -220,7 +221,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
     >   - `4d(1,i)`, coupled to $J=3/2$ means _d_-wave electron of $\kappa=2$
     >   - `4d(1,i)`, coupled to $J=5/2$ means _d_-wave electron of $\kappa=-3$, etc.
 
-   Remember to provide te $J$ value as $2J, 2J$ range (e.g. _1,1_ for $J=1/2$), and to provide _0_ as the number of excitations.
+   Remember to provide the $J$ value as $2J, 2J$ range (e.g. _1,1_ for $J=1/2$), and to provide _0_ as the number of excitations.
 
     Example `rcsf.inp` file for electron-argon scattering (_s_-wave):
   ```
@@ -276,7 +277,7 @@ CSF(s):
 6. The calculated continuum orbital wave function will be stored in the `rwfn.out` file
 (together with the bound orbitals), and also in a text-formatted file `continuum.csp`.
 
-    If grid is long enough and electron energy is not zero, calculated phase shift and scattering length
+    If the grid is long enough and electron energy is not zero, calculated phase shift and scattering length
     will be written to screen and to `rmcdhf.sum` file. The accuracy of the scattering length strongly depends
     on the electron energy
     (smaller energy means better accuracy, since it should be calculated in the $k\to0$ limit).
@@ -317,7 +318,7 @@ for a given `.w` file with optimized bound states.
 
 Files in `/grasptest/continuum/strontium_electronic_scattering_length` directory:
 - `Sr_scattering_length` - script calculating electronic scattering length using the zero-energy wave function
-- `isodata, Sr.w` - nuclear data and previuosly calculated bound states of strontium
+- `isodata, Sr.w` - nuclear data and previously calculated bound states of strontium
 
 
 ## Contributors
