@@ -53,7 +53,7 @@
                       performed."
          WRITE(24, '(1X,A,I2,A2,A,I3,A,F15.10,A)') "Orbital ", NP(CO_ORBITAL),&
             NH(CO_ORBITAL),"has been marked as continuum (kappa = ", NAK(NW), &
-                           ", energy = ",E(NW)," hartree)"
+                           ", energy = ",-E(NW)," hartree)"
          IF (CO_ENERGY == 0.0D0) THEN
             WRITE(24, '(1X,A,F15.10)') "Scattering length = ", CO_SL
          ELSE

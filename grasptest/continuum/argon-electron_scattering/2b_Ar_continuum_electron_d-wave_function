@@ -46,7 +46,7 @@ rmcdhf << S4
 n          ! Do not use default settings
 n
 y          ! Enable continuum orbital calculations
--1.0       ! Continuum electron energy (hartree, negative)
+1.0        ! Continuum electron energy (hartree)
 1          ! Include polarization potential with default parameters
 y          ! Normalize calculated continuum wave function
 y          ! Change defaut speed of light or radial grid parameters

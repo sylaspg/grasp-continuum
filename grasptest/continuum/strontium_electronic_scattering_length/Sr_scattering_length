@@ -42,7 +42,7 @@ rmcdhf << S9
 n
 n
 y        ! Continuum orbital calculations
--0.0     ! Continuum electron energy (hartree, negative)
+0.0      ! Continuum electron energy (hartree), zero for scattering length calculations
 1        ! Polarization potential, manually entered parameters
 n        ! Normalization
 y

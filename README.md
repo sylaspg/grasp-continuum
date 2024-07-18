@@ -38,28 +38,29 @@ All modifications in the original source files are clearly marked in the followi
 
 ### Continuum orbital wave function generation
 
-The basics of the relativistic multiconfiguration Dirac-Hartree-Fock method (RMCDHF)
+The basics of the relativistic multiconfiguration Dirac-Hartree-Fock method (**RMCDHF**)
 applied to scattering are described in [1].
 In short, scattering system is constructed as $N+1$ electron system,
 where $N$ electrons are bound (with discrete, negative energy levels),
-and one electron is from the continuum spectra, with given (positive) energy.
-To obtain the large and small components of the continuum electron wave function,
+and one electron is from the continuum spectra, with given (positive) energy $\epsilon$ and quantum number $\kappa$.
+
+To obtain the large $P_{\kappa\epsilon}(r)$ and small $Q_{\kappa\epsilon}(r)$ components of the continuum orbitals,
 the Dirac-Hartree-Fock equations
 
 $\big(\frac{\textrm{d}}{\textrm{d}r}+\frac{\kappa}{r}\big)P_{\kappa\epsilon}=\big(\frac{2}{\alpha}+\alpha(\epsilon-V-V_{pol})\big)Q_{\kappa\epsilon}-X^{(Q)}$
 
 $\big(\frac{\textrm{d}}{\textrm{d}r}-\frac{\kappa}{r}\big)Q_{\kappa\epsilon}=-\alpha\big(\epsilon-V-V_{pol}\big)P_{\kappa\epsilon}+X^{(P)}$
 
-are being solved using the _outward_ integration method implemented in GRASP. In the above equations,
+are solved using the _outward_ integration method implemented in GRASP. In the above equations,
 $\alpha$ is the fine structure constant,
 $\epsilon$ is the energy of the scattered particle,
-$V = V (r)$ is the Coulomb potential,
-$Vpol = Vpol (r)$ is a polarization potential,
+$V = V(r)$ is the Coulomb potential,
+$Vpol = Vpol(r)$ is a polarization potential,
 and $X(P)$ and $X(Q)$ are the exchange terms [2].
 
-> **Please note:** In accordance with the convention used in GRASP,
-bound orbitals energies are _positive_.
+> **Please note:** From the perspective of the GRASP source code, bound orbitals energies are _positive_.
 Thus, the continuum electron energy is considered _negative_.
+This does not affect the user's actions, for him the electron energy is positive (or zero in a special case).
 
 If calculated wave function is to be coupled
 with some other function (e.g. the bound state),
@@ -70,8 +71,6 @@ is described in [3].
 > **Please note:** For calculations of phases shifts and scattering lengths,
 > normalization is usually not required.
 
-
-
 ### Polarization potential
 
 The polarization potential coincides with dipole polarization at greater distances
@@ -79,8 +78,7 @@ but limited near the nucleus.
 It is currently modeled and implemented in the following form:
 
 $V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{\left(r^3+\langle r_0^3\rangle\right)^2}
--\frac{1}{2}\frac{\alpha_q r^4}{\left(r^5+\langle r_0^5\rangle\right)^2}
-$,
+-\frac{1}{2}\frac{\alpha_q r^4}{\left(r^5+\langle r_0^5\rangle\right)^2}$,
 
 where $\alpha_d$ and $\alpha_q$ represents the static dipole
 and quadrupole polarizability, respectively;
@@ -96,7 +94,7 @@ of the outermost orbital of the target atom.
 
 Polarization potential can be also provided
 in numerical form.
-It has to be provided in a text file named `vpol` located in the working directory, containing pairs `r  Vpol(r)` written in rows, e.g.
+It has to be provided in a text file named `vpol` located in the working directory, containing space-separated pairs $r\ \ V_{pol}(r)$ in rows (ordered by increasing $r$ values), e.g.
 ```
 1.00000E-05 -4.10660E-07
 1.05127E-05 -4.31715E-07
@@ -106,14 +104,18 @@ It has to be provided in a text file named `vpol` located in the working directo
 
 ### Phase shift
 
-Relativistic phase shifts $\delta_l$ (determined to the nearest $2\pi$) are obtained by comparing
-the numerical solutions with the asymptotic ones at
-large $r$ [1]:
+Relativistic phase shift $\delta_l$ is obtained by comparing
+the numerical solution with the asymptotic one at
+large $r$ [1],
+determined to the nearest $2\pi$:
 
 $P_\kappa(r)/r = j_l(kr)\cos(\delta_l) - n_l(kr)\sin(\delta_l)$,
 
 where $j_l(kr)$ and $n_l(kr)$ are the spherical Bessel functions
-of the first and the second kind, respectively.
+of the first and the second kind, respectively,
+and $k=\sqrt{2\epsilon+\alpha^2\epsilon^2}$ is the wavenumber.
+Orbital angular momentum quantum number $l$ is related to $\kappa$ such that $\kappa = l$ or $\kappa = -l-1$, whereby $\kappa \neq 0$.
+Therefore, for the $l$-th partial wave (except the $l=0$ case) we obtain two phase shifts, sometimes referred to $\delta_l^+$ and $\delta_l^-$.
 
 >**Please note:**
 > To correctly determine the phase shift, continuum orbital
@@ -132,12 +134,12 @@ analyzing the asymptotic behavior of the wave function:
 
 $a = -\lim_{k \to 0}\frac{\tan(\delta_0)}{k}$,
 
-where $\delta_0$ is the phase shift for $l=0$ (_s_-wave).
+where $\delta_0$ is the phase shift for $l=0$ (_s_-wave, $\kappa=-1$), calculated for (energy dependent) wavenumber tending towards zero in the limit.
 
 In addition to the above method
-(which has obvious disadvantages related to non-zero energy),
+(which is subject to the inaccuracy associated with the non-zero energy),
 calculation of the scattering length is implemented as the intersection
-of the asymptote of the zero-energy wave function with the r-axis.
+of the asymptote of the zero-energy ($\epsilon=0$) wave function with the $r$-axis.
 The details of that approach are described in [5].
 
 > **Please note:**
@@ -218,7 +220,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
     >   - `4d(1,i)`, coupled to $J=3/2$ means _d_-wave electron of $\kappa=2$
     >   - `4d(1,i)`, coupled to $J=5/2$ means _d_-wave electron of $\kappa=-3$, etc.
 
-   Remember, that $J$ value should be provided as $(2*J, 2*J)$ range (e.g. _1,1_ for $J=1/2$), and to provide _0_ as the number of excitations.
+   Remember to provide te $J$ value as $2J, 2J$ range (e.g. _1,1_ for $J=1/2$), and to provide _0_ as the number of excitations.
 
     Example `rcsf.inp` file for electron-argon scattering (_s_-wave):
   ```
@@ -245,8 +247,7 @@ CSF(s):
     - answer _n_ when asked _Default settings?_
     - answer _y_ when asked _Perform continuum wave function calculations?_
     - provide continuum electron energy in hartree
-    (should be negative according to convention used in GRASP,
-    or zero for scattering length calculation)
+    (should be positive, or zero for accurate scattering length calculation)
     - decide if polarization potential should be included.
       - _0_ - do not include polarization potential
       - _1_ - include dipole term of the model potential with default parameters:

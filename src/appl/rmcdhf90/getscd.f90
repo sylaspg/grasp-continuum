@@ -110,8 +110,9 @@
          YES = GETYN ()
          IF (YES) THEN
             CO_CALCULATE = .TRUE.
-            WRITE (istde,*) 'Continuum electron energy (hartree, negative):'
+            WRITE (istde,*) 'Continuum electron energy (hartree, positive or zero):'
             READ (5, *) CO_ENERGY
+            CO_ENERGY = -CO_ENERGY
             WRITE (istde,'(A)') "Include polarization potential? (0/1/2/3)"
             WRITE (istde,'(A)') "     0 -- No"
             WRITE (istde,'(A)') &

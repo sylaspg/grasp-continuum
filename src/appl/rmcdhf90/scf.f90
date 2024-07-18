@@ -168,7 +168,7 @@
          PRINT*
          WRITE(*,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital", NP(NW), NH(NW), &
             "(no.",CO_ORBITAL,") marked as continuum (kappa = ", NAK(NW), &
-            ", energy = ",CO_ENERGY," hartree)"
+            ", energy = ",-CO_ENERGY," hartree)"
       END IF
 ! PS END
 
@@ -275,7 +275,7 @@
                  performed."
             WRITE(*,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital",NP(NW),NH(NW),&
               "(no.",CO_ORBITAL,") was marked as continuum (kappa = ",NAK(NW),&
-              ", energy = ",E(NW)," hartree)"
+              ", energy = ",-E(NW)," hartree)"
             IF (CO_NORMALIZE) CALL co_normalization(CO_ORBITAL)
             CALL co_phase_shift(CO_ORBITAL)
             CALL co_scattering_length(CO_ORBITAL)

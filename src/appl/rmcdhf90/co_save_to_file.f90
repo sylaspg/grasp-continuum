@@ -30,7 +30,7 @@ SUBROUTINE co_save_to_file(J)
     OPEN(61,FILE=FNAME)
     WRITE(61,*) 'plot "-" index  0 using 1:2 with lines'    ! For gnuplot
     WRITE(61,*) '#'
-    WRITE(61,*) '# Energy (hartree)  = ',CO_ENERGY
+    WRITE(61,*) '# Energy (hartree)  = ',-CO_ENERGY
     WRITE(61,*) '# kappa             = ',NAK(J)
     IF (.NOT. CO_GRID_TOO_SHORT) WRITE(61,*) '# Phase shift       = ',CO_PS
     IF (.NOT. CO_GRID_TOO_SHORT .OR. CO_ENERGY == 0.0D0) WRITE(61,*) '# Scattering length = ',CO_SL
