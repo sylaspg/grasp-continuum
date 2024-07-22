@@ -8,6 +8,11 @@ a set of Fortran 90 programs for performing fully relativistic electron structur
 
 ## About this fork
 
+![GitHub Release](https://img.shields.io/github/v/release/sylaspg/grasp-continuum)
+![GitHub Release Date](https://img.shields.io/github/release-date/sylaspg/grasp-continuum)
+![GitHub Downloads](https://img.shields.io/github/downloads/sylaspg/grasp-continuum/total)\
+![GitHub last commit](https://img.shields.io/github/last-commit/sylaspg/grasp-continuum)
+
 This fork is intended for incorporating the continuum electron calculations
 in elastic (single channel) and inelastic (multi-channel) processes into GRASP.
 > **Please note:** Currently, only elastic processes are implemented.
