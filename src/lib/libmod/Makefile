@@ -1,6 +1,10 @@
 LIBA=${GRASP}/lib/libmod.a
 MODULES_INSTALL=${GRASP}/lib/mod
 
+# PS
+# Reference to the continuum_C.f90 file, related to the continuum orbitals calculations, has been added bellow
+# PS END
+
 OBJS= \
 	parameter_def_M.o \
 	vast_kind_param_M.o \
@@ -105,7 +109,8 @@ OBJS= \
 	wave_C.o \
 	wchblk_C.o \
 	wfac_C.o \
-	whfrom_C.o
+	whfrom_C.o \
+	continuum_C.o
 
 PHONY: install
 install: $(LIBA)

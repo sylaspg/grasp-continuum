@@ -18,6 +18,7 @@ SUBROUTINE co_save_to_file(J)
     USE wave_C, ONLY: PF, QF, MF
     USE grid_C, ONLY: R
     USE orb_C, ONLY: NAK
+    USE iounit_C
 
     IMPLICIT none
 
@@ -28,7 +29,7 @@ SUBROUTINE co_save_to_file(J)
 
 
     OPEN(61,FILE=FNAME)
-    WRITE(61,*) 'plot "-" index  0 using 1:2 with lines'    ! For gnuplot
+    WRITE(61,*) '# Continuum orbital wave function calculated by GRASPC'
     WRITE(61,*) '#'
     WRITE(61,*) '# Energy (hartree)  = ',-CO_ENERGY
     WRITE(61,*) '# kappa             = ',NAK(J)
@@ -42,7 +43,7 @@ SUBROUTINE co_save_to_file(J)
     END DO
     CLOSE(61)
 
-    PRINT*,"Continuum orbital saved to '", TRIM(FNAME), "' file."
+    WRITE(ISTDE,*) "Continuum orbital saved to '", TRIM(FNAME), "' file."
 
     RETURN
 

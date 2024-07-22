@@ -2,6 +2,10 @@ EXE=${GRASP}/bin/rwfnestimate
 LIBS=-L ${GRASP}/lib/ -lrang90 -l9290 -lmod
 FC_MODULES= -I ${GRASP}/src/lib/librang90 -I ${GRASP}/src/lib/lib9290 -I ${GRASP}/src/lib/libmod
 
+# PS
+# Reference to the co_* file, related to the continuum orbitals calculations, has been added bellow
+# PS END
+
 OBJS= \
 	tail.o \
 	tail_I.o \
@@ -35,6 +39,7 @@ OBJS= \
 	genrwf_I.o \
 	getinfo.o \
 	getinf_I.o \
+	co_initrwf.o \
 	erwf.o
 
 $(EXE): $(OBJS)

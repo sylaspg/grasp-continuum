@@ -104,25 +104,33 @@
 
 ! PS
 ! Input for continuum orbital wave function calculations
-         WRITE (istde,*)
-         WRITE (istde,'(A)',ADVANCE='NO') &
+         WRITE (ISTDE,*)
+         WRITE (ISTDE,'(A)',ADVANCE='NO') &
             'Perform continuum wave function calculations? (y/n) '
          YES = GETYN ()
          IF (YES) THEN
             CO_CALCULATE = .TRUE.
-            WRITE (istde,*) 'Continuum electron energy (hartree, positive or zero):'
-            READ (5, *) CO_ENERGY
+            DO
+               WRITE (ISTDE,*) 'Enter energy of the continuum electron &
+                                (in hartree; >= 0):'
+               READ (5, *) CO_ENERGY
+               IF (CO_ENERGY >= 0) EXIT
+            END DO
             CO_ENERGY = -CO_ENERGY
-            WRITE (istde,'(A)') "Include polarization potential? (0/1/2/3)"
-            WRITE (istde,'(A)') "     0 -- No"
-            WRITE (istde,'(A)') &
-               "     1 -- Yes, use model potential with default parameters (dipole term only)"
-            WRITE (istde,'(A)') &
+            WRITE (ISTDE,'(A)') "Include polarization potential? (0/1/2/3)"
+            WRITE (ISTDE,'(A)') "     0 -- No"
+            WRITE (ISTDE,'(A)') &
+               "     1 -- Yes, use model potential with default parameters &
+                          (dipole term only)"
+            WRITE (ISTDE,'(A)') &
                "     2 -- Yes, use model potential with manually entered &
                parameters"
-            WRITE (istde,'(A)') &
+            WRITE (ISTDE,'(A)') &
                "     3 -- Yes, use numerical data from 'vpol' file"
             READ (5, *) CO_ANSWER
+            CO_POLARIZATION_AUTO = .FALSE.
+            CO_POLARIZATION_MANUAL = .FALSE.
+            CO_POLARIZATION_FROM_FILE = .FALSE.
             SELECT CASE(CO_ANSWER)
                CASE (0)
                   CO_INCLUDE_POLARIZATION = .FALSE.
@@ -132,16 +140,16 @@
                CASE (2)
                   CO_INCLUDE_POLARIZATION = .TRUE.
                   CO_POLARIZATION_MANUAL = .TRUE.
-                  WRITE (istde,*) "Enter static dipole polarizability, &
+                  WRITE (ISTDE,*) "Enter static dipole polarizability, &
                                        alpha_d = "
                   READ (5, *) CO_ALPHA_D
-                  WRITE (istde,*) "Enter (positive) cut-off parameter, &
+                  WRITE (ISTDE,*) "Enter (positive) cut-off parameter, &
                                        <r0^3> = "
                   READ (5, *) CO_R0_3
-                  WRITE (istde,*) "Enter static quadrupole polarizability, &
+                  WRITE (ISTDE,*) "Enter static quadrupole polarizability, &
                                        alpha_q = "
                   READ (5, *) CO_ALPHA_Q
-                  WRITE (istde,*) "Enter (positive) cut-off parameter, &
+                  WRITE (ISTDE,*) "Enter (positive) cut-off parameter, &
                                        <r0^5> = "
                   READ (5, *) CO_R0_5
                CASE (3)
@@ -151,17 +159,19 @@
                   CO_INCLUDE_POLARIZATION = .FALSE.
             END SELECT
             CO_NORMALIZE = .FALSE.
-            WRITE (istde,'(A)',ADVANCE='NO') &
+            WRITE (ISTDE,'(A)',ADVANCE='NO') &
                'Normalize continuum wave function? (y/n) '
             YES = GETYN ()
             IF (YES) CO_NORMALIZE = .TRUE.
-            WRITE (istde,*)
-            WRITE (istde,*)
-            WRITE (istde,*) "Using a linear-logarithimic grid (HP > 0) &
-              is *strongly* recommended in continuum orbital calculations."
-              WRITE (istde,*) "Please consider to change the default grid &
-              parameters in the next step."
-            WRITE (istde,*)
+            WRITE (ISTDE,*)
+            WRITE (ISTDE,*)
+            WRITE (ISTDE,*) "Using a linear-logarithimic radial grid"
+            WRITE (ISTDE,*) "is *strongly* recommended in continuum orbital &
+                             calculations."
+            WRITE (ISTDE,*) "Please consider changing the default grid &
+                             parameters"
+            WRITE (ISTDE,*) "in the next step (providing HP > 0)."
+            WRITE (ISTDE,*)
          ENDIF
 ! PS END
 

@@ -22,6 +22,7 @@ SUBROUTINE co_normalization(J)
     USE orb_C
     USE wave_C
     USE grid_C
+    USE iounit_C
 
     IMPLICIT none
 
@@ -32,7 +33,7 @@ SUBROUTINE co_normalization(J)
     REAL(DOUBLE), PARAMETER :: PI = 4.0D0*ATAN(1.0D0)
 
     IF (CO_ENERGY == 0) THEN
-        PRINT*,"*** Skipping normalization of continuum wave function (energy = 0)"
+        WRITE(ISTDE,*) "*** Skipping normalization of continuum wave function (energy = 0)"
         RETURN
     END IF
 
@@ -54,19 +55,19 @@ SUBROUTINE co_normalization(J)
         CALL co_getmax(R(i_max-4:i_max+4), PF(i_max-4:i_max+4, J), 9, r0, old_amplitude)
 
         IF (r0 == 0 .AND. old_amplitude == 0) THEN
-            PRINT*,"Skipping normalization of continuum wave function  (no maximum)"
+            WRITE(ISTDE,*) "*** Skipping normalization of continuum wave function (no maximum)"
             RETURN
         ENDIF
 
         IF (old_amplitude < 0) old_amplitude = abs(old_amplitude)
         new_amplitude = PI**(-0.5) * e_rydbergs**(-0.25)
         factor = new_amplitude / old_amplitude
-        PRINT*, "Performing normalization of the continuum wave function."
+        WRITE(ISTDE,*) "Performing normalization of the continuum wave function."
         PF(:, J) = PF(:, J) * factor
         QF(:, J) = QF(:, J) * factor
     ELSE
 
-        PRINT*,"*** Skipping normalization of continuum wave function (no maximum)"
+        WRITE(ISTDE,*) "*** Skipping normalization of continuum wave function (no maximum)"
 
     ENDIF
 

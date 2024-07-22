@@ -1,5 +1,5 @@
 export FC = gfortran
-export FC_FLAGS = -O3 -fno-automatic
+export FC_FLAGS = -O3 -fno-automatic -fallow-argument-mismatch
 export FC_LD =
 export FC_MPI= mpifort
 export OMPI_FC=${FC}

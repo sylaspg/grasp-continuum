@@ -22,6 +22,7 @@ SUBROUTINE co_phase_shift(J)
     USE wave_C, ONLY: PF, QF, MF
     USE grid_C, ONLY: R
     USE orb_C, ONLY: NAK
+    USE iounit_C
 
     IMPLICIT none
 
@@ -36,7 +37,7 @@ SUBROUTINE co_phase_shift(J)
 
 
     IF (CO_ENERGY == 0.0D0) THEN
-        PRINT*,"Zero energy case, skipping phase shift calculation."
+        WRITE(ISTDE,*) "Zero energy case, skipping phase shift calculation."
         RETURN
     END IF
 
@@ -59,12 +60,12 @@ SUBROUTINE co_phase_shift(J)
         END IF
     END DO
     IF (i_max <= 0) THEN
-        PRINT*,"*** Warning: skipping phase shift calculation (no maximum)"
+        WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (no maximum)"
         RETURN
     ENDIF
     CALL co_getmax(R(i_max-4:i_max+4), PF(i_max-4:i_max+4, J), 9, r_max, y_max)
     IF (r_max == 0 .AND. y_max == 0) THEN
-        PRINT*,"*** Warning: skipping phase shift calculation (no maximum)"
+        WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (no maximum)"
         RETURN
     ENDIF
     ! Enumerate the maximum
@@ -84,12 +85,12 @@ SUBROUTINE co_phase_shift(J)
         END IF
     END DO
     IF (i_max1 <= 0) THEN
-        PRINT*,"*** Warning: skipping phase shift calculation (no maximum)"
+        WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (no maximum)"
         RETURN
     ENDIF
     CALL co_getmax(R(i_max1-4:i_max1+4), PF(i_max1-4:i_max1+4, J), 9, r_max1, y_max1)
     IF (r_max1 == 0 .AND. y_max1 == 0) THEN
-        PRINT*,"*** Warning: skipping phase shift calculation (no maximum)"
+        WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (no maximum)"
         RETURN
     ENDIF
 
@@ -103,10 +104,10 @@ SUBROUTINE co_phase_shift(J)
                    wavelength of the continuum spinor = ",wavelength_diff,"%"
     IF (wavelength_diff > 0.01D0) THEN
         CO_GRID_TOO_SHORT = .TRUE.
-        PRINT*,"*** Warning: skipping phase shift calculation (too short radial grid)"
+        WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (too short radial grid)"
         RETURN
     ELSE
-        PRINT*,"Radial grid is long enough to calculate the phase shift."
+        WRITE(ISTDE,*) "Radial grid is long enough to calculate the phase shift."
         CO_GRID_TOO_SHORT = .FALSE.
     END IF
 
@@ -126,12 +127,12 @@ SUBROUTINE co_phase_shift(J)
         END IF
     END DO
     IF (i0_max <= 0) THEN
-        PRINT*,"*** Warning: skipping phase shift calculation (no maximum)"
+        WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (no maximum)"
         RETURN
     END IF
     CALL co_getmax(R(i0_max-4:i0_max+4), CO_CSP_ZERO(i0_max-4:i0_max+4), 9, r0_max, y0_max)
     IF (r0_max == 0 .AND. y0_max == 0) THEN
-        PRINT*,"*** Warning: skipping phase shift calculation (no maximum)"
+        WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (no maximum)"
         RETURN
     ENDIF
     ! Enumerate the maxima
@@ -161,9 +162,9 @@ SUBROUTINE co_phase_shift(J)
     END DO
 
     IF (CO_PS /= CO_PS_SHIFTED) THEN
-        PRINT*,"Phase shift = ",CO_PS," = ", CO_PS_SHIFTED
+        WRITE(ISTDE,*) "Phase shift = ",CO_PS," = ", CO_PS_SHIFTED
     ELSE
-        PRINT*,"Phase shift = ",CO_PS
+        WRITE(ISTDE,*) "Phase shift = ",CO_PS
     END IF
 
     RETURN

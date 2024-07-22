@@ -18,6 +18,7 @@ SUBROUTINE co_scattering_length(J)
     USE def_C, ONLY: C
     USE wave_C, ONLY: PF, QF, MF
     USE grid_C, ONLY: R
+    USE iounit_C
 
     IMPLICIT none
 
@@ -45,8 +46,8 @@ SUBROUTINE co_scattering_length(J)
         sl2 = -b / a
         sl_diff = ABS( (CO_SL - sl2) / CO_SL * 100 )
 
-        PRINT*,"Scattering length = ", CO_SL, "(diff = ", sl_diff, "% )"
-        WRITE(*,'(A,F10.2,A,F7.2)') " Grid: Rmax = ", R(mfj), ", Rstep = ", R(mfj)-R(mfj-1)
+        WRITE(ISTDE,'(A,F10.2,A,F7.2)') " Radial grid: Rmax = ", R(mfj), ", Rstep = ", R(mfj)-R(mfj-1)
+        WRITE(ISTDE,*) "Scattering length = ", CO_SL, "(diff = ", sl_diff, "% )"
 
     ELSE
 
@@ -55,7 +56,7 @@ SUBROUTINE co_scattering_length(J)
 
             wavenumber = SQRT(2*(-CO_ENERGY) + (-CO_ENERGY)/(C*C))
             CO_SL = -1/wavenumber * TAN(CO_PS)
-            PRINT*,"Scattering length = ", CO_SL, "(estimation only - non-zero energy)"
+            WRITE(ISTDE,*) "Scattering length = ", CO_SL, "(estimation only - non-zero energy)"
 
         END IF
 

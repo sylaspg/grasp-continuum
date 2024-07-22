@@ -160,15 +160,15 @@
       IF (CO_CALCULATE) THEN
          CO_ORBITAL = NW
          IF (CO_CALCULATE .AND. UCF(CO_ORBITAL) /= 1) THEN
-            PRINT*
-            PRINT*, "RMCDHF: In continuum calculations ",&
+            WRITE(ISTDE,*)
+            WRITE(ISTDE,*) "RMCDHF: In continuum orbital calculations ",&
                     "only one electron at the outermost orbital is allowed."
             STOP "*** Program execution terminated. ***"
          END IF
-         PRINT*
-         WRITE(*,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital", NP(NW), NH(NW), &
-            "(no.",CO_ORBITAL,") marked as continuum (kappa = ", NAK(NW), &
-            ", energy = ",-CO_ENERGY," hartree)"
+         WRITE(ISTDE,*)
+         WRITE(ISTDE,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital", NP(NW), &
+           NH(NW),"(no.",CO_ORBITAL,") marked as continuum (kappa = ", &
+           NAK(NW),", energy = ",-CO_ENERGY," hartree)"
       END IF
 ! PS END
 
@@ -270,12 +270,12 @@
 
 ! PS
          IF (CO_CALCULATE) THEN
-            PRINT*
-            PRINT*,"Continuum orbital wave function calculations have been &
-                 performed."
-            WRITE(*,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital",NP(NW),NH(NW),&
-              "(no.",CO_ORBITAL,") was marked as continuum (kappa = ",NAK(NW),&
-              ", energy = ",-E(NW)," hartree)"
+            WRITE(ISTDE,*)
+            WRITE(ISTDE,*) "Continuum orbital wave function calculations &
+                            have been performed."
+            WRITE(ISTDE,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital",NP(NW),&
+              NH(NW),"(no.",CO_ORBITAL,") was marked as continuum (kappa = ",&
+              NAK(NW),", energy = ",-E(NW)," hartree)"
             IF (CO_NORMALIZE) CALL co_normalization(CO_ORBITAL)
             CALL co_phase_shift(CO_ORBITAL)
             CALL co_scattering_length(CO_ORBITAL)

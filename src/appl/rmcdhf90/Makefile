@@ -2,6 +2,10 @@ EXE=${GRASP}/bin/rmcdhf
 LIBS=-L ${GRASP}/lib/ -ldvd90 -l9290 -lmod
 FC_MODULES= -I ${GRASP}/src/lib/libdvd90 -I ${GRASP}/src/lib/lib9290 -I ${GRASP}/src/lib/libmod
 
+# PS
+# References to the co_* files, related to the continuum orbitals calculations, have been added bellow
+# PS END
+
 OBJS= \
 	mpi_s.o \
 	dsubrs.o \
@@ -112,6 +116,13 @@ OBJS= \
 	scf_I.o \
 	strsum.o \
 	strsum_I.o \
+	co_spherical_bessel.o \
+	co_getmax.o \
+	co_save_to_file.o \
+	co_normalization.o \
+	co_phase_shift.o \
+	co_scattering_length.o \
+	co_add_polarization_potential.o \
 	rscfvu.o
 
 $(EXE): $(OBJS)

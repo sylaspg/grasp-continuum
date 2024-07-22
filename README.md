@@ -282,6 +282,10 @@ CSF(s):
     experiment with the other grid parameters,
     > and/or try the other method for initial estimation of the radial wave function for the continuum electron.
 
+    > **Please note:**
+    > Only the `rmcdhf` code has been adapted for continuum orbital calculations, not
+    `rmcdhf_mem`, `rmcdhf_mem_mpi` or `rmcdhf_mpi`.
+
 6. **Output**
 
     The calculated continuum orbital wave function will be stored in the `rwfn.out` file
@@ -346,11 +350,9 @@ P. Syty, M.P. Piłat, J.E. Sienkiewicz, _GRASPC - GRASP package adapted for the 
 
 > **Please note:**
 > All the installation instructions for original GRASP
-> are also valid for that fork, just use the following command for cloning the repository:
-`
-git clone https://github.com/sylaspg/grasp-continuum.git
-`
-Further in this section there are original instructions, adapted for  GRASPC repository. **All the credits goes to the GRASP contributors, who prepared the installation procedure.**
+> are also valid for that fork, with the repository address changed to:
+`https://github.com/sylaspg/grasp-continuum.git`.
+Further in this section there are original instructions, adapted for the GRASPC repository. **All the credits goes to the GRASP contributors, who prepared the original installation procedure.**
 
 To compile and install GRASPC, first clone this Git repository:
 
