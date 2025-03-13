@@ -35,6 +35,7 @@ SUBROUTINE co_phase_shift(J)
     REAL(DOUBLE) :: wavenumber, wavelength, wavelength_csp, wavelength_diff
     REAL(DOUBLE), PARAMETER :: PI = 4.0D0*ATAN(1.0D0)
 
+    WRITE(ISTDE,*)
 
     IF (CO_ENERGY == 0.0D0) THEN
         WRITE(ISTDE,*) "Zero energy case, skipping phase shift calculation."
@@ -94,7 +95,6 @@ SUBROUTINE co_phase_shift(J)
         RETURN
     ENDIF
 
-
     ! Check if the continuum spinor has been calculated far enough
     ! from the origin, by comparing the analytical and numerical wavelengths
     wavelength = 2 * PI / wavenumber
@@ -102,6 +102,7 @@ SUBROUTINE co_phase_shift(J)
     wavelength_diff = abs(wavelength - wavelength_csp) / wavelength * 100
     WRITE(*,'(A,F13.8,A)') " Difference between analytical and numerical &
                    wavelength of the continuum spinor = ",wavelength_diff,"%"
+    WRITE(ISTDE,'(A,F10.2,A,F7.2)') " Radial grid: Rmax = ", R(mfj), ", Rstep = ", R(mfj)-R(mfj-1)
     IF (wavelength_diff > 0.01D0) THEN
         CO_GRID_TOO_SHORT = .TRUE.
         WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (too short radial grid)"

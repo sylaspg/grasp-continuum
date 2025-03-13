@@ -10,7 +10,6 @@ a set of Fortran 90 programs for performing fully relativistic electron structur
 
 ![GitHub Release](https://img.shields.io/github/v/release/sylaspg/grasp-continuum)
 ![GitHub Release Date](https://img.shields.io/github/release-date/sylaspg/grasp-continuum)
-![GitHub Downloads](https://img.shields.io/github/downloads/sylaspg/grasp-continuum/total)\
 ![GitHub last commit](https://img.shields.io/github/last-commit/sylaspg/grasp-continuum)
 
 This fork is intended for incorporating the continuum electron calculations
@@ -26,7 +25,7 @@ the default flow is changed and different output is produced.
 The only differences are listed below:
 - the default number of points in the radial (NNNP) is increased to 5000 in the `src/lib/libmod/parameter_def_M.f90` file, since continuum orbitals have to be calculated on the far-reaching computational grid;
 for larger systems, it is recommended to magnify the grid size even several times
-- `rmcdhf`: in addition to the other properties, $\langle r^3\rangle$ and $\langle r^5\rangle$ are calculated for each orbital, since they are part of the model polarization potential
+- `rmcdhf`: in addition to the other properties, $\langle r^3\rangle$, $\langle r^5\rangle$ and $\langle r^7\rangle$ are calculated for each orbital, since they are part of the model polarization potential
 - `rwfnplot`: generation of the input file for the `gnuplot` plotting program has been added
 - `CMakeList.txt`:
 The file has been reorganized so that the additional user settings in the `CMakeList.user` file are correctly taken into account
@@ -79,22 +78,21 @@ is described in [3].
 
 ### Polarization potential
 
-The polarization potential coincides with dipole polarization at greater distances
-but is limited near the nucleus.
+The polarization potential coincides with dipole, quadrupole and octupole polarization at greater distances but is limited near the nucleus.
 It is currently modeled and implemented in the following form:
 
 $V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{\left(r^3+\langle r_0^3\rangle\right)^2}
--\frac{1}{2}\frac{\alpha_q r^4}{\left(r^5+\langle r_0^5\rangle\right)^2}$,
+-\frac{1}{2}\frac{\alpha_q r^4}{\left(r^5+\langle r_0^5\rangle\right)^2}
+-\frac{1}{2}\frac{\alpha_o r^6}{\left(r^7+\langle r_0^7\rangle\right)^2}$,
 
-where $\alpha_d$ and $\alpha_q$ represent the static dipole
-and quadrupole polarizability, respectively;
-$\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ are the cut-off parameters.
+where $\alpha_d$, $\alpha_q$ and $\alpha_o$ represent the static dipole, quadrupole and octupole polarizabilities, respectively;
+$\langle r_0^3\rangle$, $\langle r_0^5\rangle$ and $\langle r_0^7\rangle$ are the cut-off parameters.
 
 For atoms, one possible source for static dipole polarizabilities is [4]
 (except for Livermorium atom, atomic number 116).
-There is no single aggregate source for static quadrupole polarizabilities.
+There is no single aggregate source for static quadrupole and octupole polarizabilities.
 
-For atoms, cut-offs $\langle r_0^3\rangle$ and $\langle r_0^5\rangle$ can be taken
+For atoms, cut-offs $\langle r_0^3\rangle$, $\langle r_0^5\rangle$ and $\langle r_0^7\rangle$ can be taken
 from bound states calculations, assuming that $\langle r_0\rangle$ is the radius
 of the outermost orbital of the target atom.
 
@@ -126,7 +124,7 @@ Therefore, for the $l$-th partial wave (except the $l=0$ case) we obtain two pha
 >**Please note:**
 > To correctly determine the phase shift, the continuum orbital
 > has to be calculated far enough from the origin,
-> to ensure that all of the potentials can be neglected.
+> to ensure that atom-electron interaction can be neglected.
 
 ### Scattering length
 
@@ -164,7 +162,7 @@ _University of California Press, Oakland_ pp. 522–524 (1981), https://www.ucpr
 _Molecular Physics_ 117 9-12 (2019), https://doi.org/10.1080/00268976.2018.1535143
 5. P. Syty, M.P. Piłat, J.E. Sienkiewicz,
 Calculation of electron scattering lengths on Ar, Kr, Xe, Rn and Og atoms,
-_J. Phys. B: At. Mol. Opt. Phys._ (accepted manuscript),
+_J. Phys. B: At. Mol. Opt. Phys._ 57 175202 (2024),
 https://doi.org/10.1088/1361-6455/ad4fd1
 
 
@@ -177,6 +175,11 @@ https://doi.org/10.1088/1361-6455/ad4fd1
 - Normalization of the calculated continuum orbital
 
 ### Changelog
+
+- **2025-03-13**
+  - `co_add_polarization_potential` Added: Octupole term in the model polarization potential (this entailed a slight change in the input reception)
+  - `co_scattering_length` Added: Calculation of relative error of straight line determination at the tail, in scattering length calculation (in the zero-energy case)
+  - Several minor code and test-case improvements
 
 - **2024-07-18**
   - `rmcdhf` Added: phase shift calculation
@@ -270,7 +273,7 @@ CSF(s):
             $\alpha_d$ taken from [2], and cut-off $\langle r_0^3\rangle$ taken from bound state calculations
             as the size of the outermost orbital; here, the quadrupole term is omitted
       - _2_ - include model potential with all parameters provided manually by the user; in turn:
-            $\alpha_d$, $\langle r_0^3\rangle$, $\alpha_q$ and $\langle r_0^5\rangle$
+            $\alpha_d$, $\langle r_0^3\rangle$, $\alpha_q$, $\langle r_0^5\rangle$, $\alpha_o$ and $\langle r_0^7\rangle$
       - _3_ - include numerical potential from the file named `vpol`
     - decide (_y_/_n_) if the calculated continuum wave function should be normalized
     - answer _y_ when asked _Change default speed of light or radial grid parameters?_
@@ -303,11 +306,12 @@ CSF(s):
 
     If the electron energy is set to zero, only the scattering length is calculated in a more accurate approach,
     as the intersection of the asymptote of the zero-energy wave function with the r-axis.
-    In that case, the additional parameter 'diff'
-    is calculated and shown, specifying the percentage difference between the scattering length
+    In that case, the additional information is given, which may be useful for error estimation.
+    First one is the relative error of straight line determination at the tail.
+    The second one is the percentage difference between the scattering length
     calculated from the last two points on the grid,
-    and from the penultimate
-    and the one before the penultimate point (a lower value means better accuracy).
+    and from the penultimate and the one before the penultimate point.
+    In both cases, a lower value means better accuracy.
 
 ## Examples
 
@@ -315,15 +319,24 @@ CSF(s):
 
 Bound states estimation, continuum orbital wave functions generation
 (for two different partial waves), phase shift calculations, scattering length calculations using the _zero energy_ approach;
-calculations with default and manually entered parameters of polarization potential.
+calculations with default, numerical and manually entered parameters of polarization potential.
+The energies of the incident electron were chosen to easily compare the results with those in
+Y. Cheng, S. Liu, S. B. Zhang, and Y.-B. Tang, Phys. Rev. A 102, 012824 (2020),
+https://doi.org/10.1103/PhysRevA.102.012824.
 
 Files in `/grasptest/continuum/argon-electron_scattering` directory:
-- `1_Ar_bound` - script creating the nuclear data and calculating the bound states of argon atom (very simple case without correlations)
-- `2a_Ar_continuum_electron_s-wave_function` - script calculating continuum orbital of $\kappa = -1$ (_s_-wave) and electron energy $\epsilon=0.1$ hartree
-- `2b_Ar_continuum_electron_d-wave_function`- script calculating _normalized_ continuum orbital of $\kappa = 2$ (_d_-wave) and electron energy  $\epsilon=1.0$ hartree
+- `1_Ar_continuum_electron_s-wave_function` - script calculating continuum orbital of $\kappa = -1$ (_s_-wave, $J=1/2$) and electron energy $\epsilon=0.00124997$ hartree, using the dipole term of the polarization potential with default parameters
+- `2_Ar_continuum_electron_d-wave_function`- script calculating _normalized_ continuum orbital of $\kappa = 2$ (_d_-wave, $J=3/2$) and electron energy  $\epsilon=0.04499880$ hartree, using polarization potential read from a file
 - `3_Ar_electronic_scattering_length` - script calculating electronic scattering length using the zero-energy wave function
+- `Ar_bound_DF` - auxiliary script creating the nuclear data and calculating the bound states of argon atom (very simple case without correlations); there's no need to call it by hand, it is invoked automatically by all of the above scripts
+- `clean` - auxiliary script, deleting all of the output files created during program execution
+- `vpol` - auxiliary file with the polarization potential given in numerical form; it is used by the second script above
 
-After running the first script that creates the `isodata` and `Ar.w` files, the other scripts can be run independently and in any order.
+Scripts realizing the main calculations (beginning with a number) can be run independently and in any order.
+
+The results stay in a very good agreement with results from Cheng, when it comes to phase shifts
+in the first two examples ($\delta_0 = 0.03432$ vs. $0.03999$,  and $\delta_2^+ = 0.03241$ vs. $0.03253$),
+and electronic scattering length in the third example ($a_0 = -1.320$ vs. $-1.394$).
 
 ### Electronic scattering length of strontium
 
@@ -333,7 +346,7 @@ for a given `.w` file with optimized bound states.
 Files in `/grasptest/continuum/strontium_electronic_scattering_length` directory:
 - `Sr_scattering_length` - script calculating electronic scattering length using the zero-energy wave function
 - `isodata, Sr.w` - nuclear data and previously calculated bound states of strontium
-
+- `clean` - script cleaning the output files
 
 ## Contributors
 #### Code development and testing; preparing of the documentation; preparing and scripting the test cases; maintaining the repository

@@ -6,7 +6,7 @@ MODULE continuum_C
 !  continuum orbitals. All names starts with 'CO_' prefix.             *
 !                                                                      *
 !   Paweł Syty                                                         *
-!                                               Gdańsk, 2019 - 2024    *
+!                                               Gdańsk, 2019 - 2025    *
 !                                                                      *
 !***********************************************************************
     USE vast_kind_param, ONLY: DOUBLE
@@ -38,6 +38,8 @@ MODULE continuum_C
     REAL(DOUBLE) :: CO_ALPHA_D = 0.0D0, CO_R0_3 = 0.0D0
     ! Quadrupole polarization potential parameters (polarizability, <cutoff^5>)
     REAL(DOUBLE) :: CO_ALPHA_Q = 0.0D0, CO_R0_5 = 0.0D0
+    ! Octupole polarization potential parameters (polarizability, <cutoff^7>)
+    REAL(DOUBLE) :: CO_ALPHA_O = 0.0D0, CO_R0_7 = 0.0D0
 
 ! Properties of the continuum wave function
     REAL(DOUBLE) :: CO_SL ! Scattering length

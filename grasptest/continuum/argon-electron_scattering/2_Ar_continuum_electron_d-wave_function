@@ -2,25 +2,22 @@
 
 set -x
 
-###### 2. Continuum state: s-wave, kappa = -1 ######
+###### 1. Bound states ######
+
+./Ar_bound_DF
+
+
+###### 2. Continuum state: d-wave, kappa = 2 ######
 
 # Add one additional orbital with just one electron to CSFs list.
-# It will be treated as continuum electron during the SCF procedure.
-# Principal quantum number will be ignored,
-# kappa will be determined from the subshell designation.
-# E.g. 4s(1,i), coupled to J = 1/2 means s-wave electron of kappa = -1
-#      4p(1,i), coupled to J = 1/2 means p-wave electron of kappa =  1
-#      4p(1,i), coupled to J = 3/2 means p-wave electron of kappa = -2
-#      4d(1,i), coupled to J = 3/2 means d-wave electron of kappa =  2
-#      4d(1,i), coupled to J = 5/2 means d-wave electron of kappa = -3
-#      etc.
+# For d-wave and kappa = 2, we use 4d(1,i) coupled to J = 3/2.
 rcsfgenerate << S1
 *
 3         ! Argon
-4s(1,i)   ! Additional s-wave electron
+4d(1,i)   ! Additional d-wave electron
 
-4s
-1,1       ! J=1/2
+4d
+3,3       ! J=3/2
 0         ! No excitations
 n
 S1
@@ -32,21 +29,22 @@ y
 S2
 
 # Initial estimates of radial wave functions.
-# Use previosly calculated functions for bound states (Ar.w),
+# Use previosly calculated functions for bound states (DF.w),
 # and any other method for the addidtional (continuum) orbital.
 # Here, dedicated method (5), intended for continuum orbitals only, is used
 # (but any other should also work).
 rwfnestimate << S3
 y
 1
-Ar.w
+DF.w
 *
 5
 *
 S3
 
 # Now run rmcdhf for continuum wave function calculation.
-# Here, use the default parameters of polarization potential.
+# Now, use the polarization potential given in numerical form
+# and read from the 'vpol' file.
 # Bear in mind, that grid should be long enough, and dense enough
 # to obtain "nice-looking" function.
 # Most important switches/answers are described below.
@@ -54,13 +52,13 @@ rmcdhf << S4
 n          ! Do not use default settings
 n
 y          ! Enable continuum orbital calculations
-0.1        ! Continuum electron energy (hartree)
-1          ! Include polarization potential with default parameters
-n          ! Do not normalize calculated continuum wave function
+0.0449988  ! Continuum electron energy (hartree)
+3          ! Include polarization from the 'vpol' file
+y          ! Normalize calculated continuum wave function
 y          ! Change defaut speed of light or radial grid parameters
 n
 y          ! Revise default radial grid parameters
-1.0E-007   ! New RNT
+5.2631578947368416E-008   ! New RNT
 5.0E-2     ! New H
 0.2        ! New HP; use non-zero value to force the lin-log grid
 5000       ! New N; Use as big as possible

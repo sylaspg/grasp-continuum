@@ -152,6 +152,12 @@
                   WRITE (ISTDE,*) "Enter (positive) cut-off parameter, &
                                        <r0^5> = "
                   READ (5, *) CO_R0_5
+                  WRITE (ISTDE,*) "Enter static octupole polarizability, &
+                                       alpha_o = "
+                  READ (5, *) CO_ALPHA_O
+                  WRITE (ISTDE,*) "Enter (positive) cut-off parameter, &
+                                       <r0^7> = "
+                  READ (5, *) CO_R0_7
                CASE (3)
                   CO_INCLUDE_POLARIZATION = .TRUE.
                   CO_POLARIZATION_FROM_FILE = .TRUE.

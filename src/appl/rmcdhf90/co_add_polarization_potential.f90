@@ -5,18 +5,20 @@ SUBROUTINE co_add_polarization_potential()
 !   Adds polarization potential to the direct potential.               *
 !   The polarization potential can be either:                          *
 !   - modeled as                                                       *
-!       VPOL(R) = -0.5 * ALPHA_D * R**2 / (R**3 + <R^3>)**2 -          *
-!                  0.5 * ALPHA_Q * R**4 / (R**5 + <R^5>)**2            *
+!       Vpol(R) = -0.5 * ALPHA_D * R**2 / (R**3 + <R^3>)**2 -          *
+!                  0.5 * ALPHA_Q * R**4 / (R**5 + <R^5>)**2 -          *
+!                  0.5 * ALPHA_O * R**6 / (R**7 + <R^7>)**2            *
 !                                                                      *
 !   - read from a text 'vpol' file in format                           *
-!       R1 VPOL(R1)                                                    *
-!       R2 VPOL(R2)                                                    *
+!       R1 Vpol(R1)                                                    *
+!       R2 Vpol(R2)                                                    *
 !         ...                                                          *
 !                                                                      *
 !   Call(s) to: [LIB92] RINT, INTERP                                   *
 !                                                                      *
 !   Paweł Syty                                                         *
 !                                                          June 2024   *
+!                                            Last update: March 2025   *
 !                                                                      *
 !***********************************************************************
 
@@ -354,10 +356,17 @@ SUBROUTINE co_add_polarization_potential()
             " Include model polarization potential, alpha_d = ", CO_ALPHA_D, ", <R0^3> = ", CO_R0_3
             CO_VPOL(:N) = -0.5 * CO_ALPHA_D * R(:N)**2 / (R(:N)**3 + CO_R0_3)**2
 
-            IF (CO_ALPHA_Q /= 0 .AND. CO_R0_5 /= 0) THEN
+            IF (CO_ALPHA_Q /= 0.0D0 .AND. CO_R0_5 /= 0.0D0) THEN
                 WRITE(ISTDE,'(A,F15.10,A,F15.10)') &
                     " Include quadrupole term, alpha_q = ", CO_ALPHA_Q, ", <R0^5> = ", CO_R0_5
                 CO_VPOL(:N) = CO_VPOL(:N) -0.5 * CO_ALPHA_Q * R(:N)**4 / (R(:N)**5 + CO_R0_5)**2
+            END IF
+
+            ! Octupole contribution
+            IF (CO_ALPHA_O /= 0.0D0 .AND. CO_R0_7 /= 0.0D0) THEN
+                WRITE(ISTDE,'(A,F15.10,A,F15.10)') &
+                    " Include octupole term, alpha_o = ", CO_ALPHA_O, ", <R0^7> = ", CO_R0_7
+                CO_VPOL(:N) = CO_VPOL(:N) -0.5 * CO_ALPHA_O * R(:N)**6 / (R(:N)**7 + CO_R0_7)**2
             END IF
 
         END IF

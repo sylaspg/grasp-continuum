@@ -39,8 +39,8 @@
       INTEGER :: I, MODE
       REAL(DOUBLE) :: WA, WB, WC, WD, WE
 ! PS
-! <r^3> and <r^5>, needed for continuum calculations
-      REAL(DOUBLE) :: W3, W5
+! <r^3>, <r^5> and <r^7>, needed for continuum calculations
+      REAL(DOUBLE) :: W3, W5, W7
 ! PS END
 !-----------------------------------------------
 !
@@ -89,6 +89,7 @@
 ! PS
          W3 = RINT (I,I, 3)
          W5 = RINT (I,I, 5)
+         W7 = RINT (I,I, 7)
 ! PS END
          WE = 0.d0
          IF (NH(I) /= 's ' .AND. NH(i) /= 'p-') then
@@ -96,7 +97,7 @@
          END IF
 ! PS
          !WRITE (24,304) NP(I),NH(I),WE,WA,WB,WC,WD, UCF(I)
-         WRITE (24,304) NP(I),NH(I),WE,WA,WB,WC,WD,W3,W5, UCF(I)
+         WRITE (24,304) NP(I),NH(I),WE,WA,WB,WC,WD,W3,W5,W7, UCF(I)
 ! PS END
       END DO
 !
@@ -115,10 +116,10 @@
          13X,'p0',5X,'gamma',5X,'P(2)',7X,'Q(2)',3X,'Consistency',' MTP'/)
   302 FORMAT(1X,I2,A2,1X,1P,D17.10,1P,D11.3,0P,F6.2,1P,3(D11.3),I5)
 ! PS
-  303 FORMAT (/18X,'-3',14X,'-1',29X,'2',14x,'4',14x,'3',14x,'5',5X, &
+  303 FORMAT (/18X,'-3',14X,'-1',29X,'2',14x,'4',14x,'3',14x,'5',14x,'7',5X, &
   'Generalised'/'Subshell',4X,'<  r  >',8X,'<  r  >',8X,'<  r  >',8X,&
-      '<  r  >',8X,'<  r  >',8X,'<  r  >',8X,'<  r  >',6X,'occupation'/)
-  304 FORMAT (1X,1I2,1A2,1X,1P,8D15.5)
+      '<  r  >',8X,'<  r  >',8X,'<  r  >',8X,'<  r  >',8X,'<  r  >',6X,'occupation'/)
+  304 FORMAT (1X,1I2,1A2,1X,1P,9D15.5)
 !  303 FORMAT (/18X,'-3',14X,'-1',29X,'2',14x,'4',5X,'Generalised'     &
 !               /'Subshell',4X,'<  r  >',8X,'<  r  >',8X,'<  r  >',8X,  &
 !                '<  r  >',8X,'<  r  >',6X,'occupation'/)

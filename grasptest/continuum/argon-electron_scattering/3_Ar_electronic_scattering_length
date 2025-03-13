@@ -2,7 +2,11 @@
 
 set -x
 
-###### 3. Continuum state: zero-energy wave for scattering length calculations ######
+###### 1. Bound states ######
+
+./Ar_bound_DF
+
+###### 2. Continuum state: zero-energy wave for scattering length calculations ######
 
 # Add one additional orbital with just one electron to CSFs list.
 # Since we would like to calculate scattering length,
@@ -31,7 +35,7 @@ S2
 rwfnestimate << S3
 y
 1
-Ar.w
+DF.w
 *
 5
 *
@@ -39,7 +43,7 @@ S3
 
 # Now run rmcdhf for scattering length calculations.
 # This is accomplished by forcing zero energy of the continuum electron.
-# Use manually entered parameters of polarization potential.
+# Use manually entered parameters of polarization potential for dipole polarization term.
 # The further the grid extends from the nucleus, the better accuracy (in general).
 rmcdhf << S4
 n          ! Do not use default settings
@@ -48,17 +52,19 @@ y          ! Enable continuum orbital calculations
 0.0        ! Continuum electron energy (hartree), zero for scattering length
 2          ! Include polarization potential with default parameters
 11.083     ! Static dipole polarizability
-7.76       ! <r0^3> cut-off
+7.7642     ! <r0^3> cut-off
 0.14       ! Static quadrupole polarizability
-65.74      ! <r0^5> cut-off
+65.7347    ! <r0^5> cut-off
+0.0        ! Static octupole polarizability
+0.0        ! <r0^7> cut-off
 n          ! Do not normalize calculated continuum wave function
 y          ! Change defaut speed of light or radial grid parameters
 n
 y          ! Revise default radial grid parameters
-1.0E-007   ! New RNT
-5.0E-2     ! New H
-1.0        ! New HP; use non-zero value to force the lin-log grid
-5000       ! New N; Use as big as possibe
+5.2631578947368416E-008   ! New RNT; Here - default in GRASP
+5.0E-2     ! New H; Here - default in GRASP
+1.0        ! New HP; Use non-zero value to force the lin-log grid
+5000       ! New N; Use as big as possible
 n
 999
 n

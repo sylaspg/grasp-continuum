@@ -2,7 +2,7 @@
 
 set -x
 
-###### 1. Bound states ######
+###### Bound states ######
 
 # This is only a trivial example (DF) for argon atom.
 # If you already have optimized radial wave functions
@@ -56,4 +56,4 @@ y
 S5
 
 # Save results
-rsave Ar
+rsave DF
