@@ -12,16 +12,16 @@ a set of Fortran 90 programs for performing fully relativistic electron structur
 ![GitHub Release Date](https://img.shields.io/github/release-date/sylaspg/grasp-continuum)
 ![GitHub last commit](https://img.shields.io/github/last-commit/sylaspg/grasp-continuum)
 
-This fork is intended for incorporating the continuum electron calculations
-in elastic (single channel) and inelastic (multi-channel) processes into GRASP.
+This fork is intended to incorporate the scattered (continuum) electron calculations
+in elastic (single-channel) and inelastic (multi-channel) processes into GRASP.
 > **Please note:** Currently, only elastic processes are implemented.
 
 The main idea is to use as many computational processes as they are implemented in GRASP,
 by adapting them to calculate continuum orbitals wave functions.
 
-This fork is completely transparent for usual calculations in GRASP (bound states and their properties).
-Only when calculations involving continuum orbital are requested (during the execution of the `rmcdhf` program),
-the default flow is changed and different output is produced.
+This fork is entirely transparent for usual calculations in GRASP (bound states and their properties).
+Only when calculations involving continuum orbital are requested (during the execution of the `rmcdhf` program).
+The default flow is changed, and different outputs are produced.
 The only differences are listed below:
 - the default number of points in the radial (NNNP) is increased to 5000 in the `src/lib/libmod/parameter_def_M.f90` file, since continuum orbitals have to be calculated on the far-reaching computational grid;
 for larger systems, it is recommended to magnify the grid size even several times
@@ -31,7 +31,7 @@ for larger systems, it is recommended to magnify the grid size even several time
 The file has been reorganized so that the additional user settings in the `CMakeList.user` file are correctly taken into account
 - `CMakeList.user`: file with `-fallow-argument-mismatch` flag, required for recent versions of the `gfortran` compiler; this file is not part of the original GRASP repository
 
-All modifications in the original source files are clearly marked in the following way:
+All modifications in the original source files are marked in the following way:
 ```
 ! PS      (or # PS in CMakeList.* )
   ... code modified/added
@@ -68,17 +68,17 @@ Thus, the continuum electron energy is considered _negative_.
 This does not affect the user's actions, for him the continuum electron energy is always positive (or zero in a special case).
 
 If the calculated wave function is to be coupled
-with some other function (e.g. the bound state),
+with some other function (e.g., the bound state),
 it should be normalized first.
 The currently implemented _per energy_ continuum wave function normalization
 is described in [3].
 
 > **Please note:** For calculations of phase shifts and scattering lengths,
-> normalization is usually not required.
+> Normalization is usually not required.
 
 ### Polarization potential
 
-The polarization potential coincides with dipole, quadrupole and octupole polarization at greater distances but is limited near the nucleus.
+At greater distances, the polarization potential coincides with dipole, quadrupole, and octupole polarization but is limited near the nucleus.
 It is currently modeled and implemented in the following form:
 
 $V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{\left(r^3+\langle r_0^3\rangle\right)^2}
@@ -89,14 +89,14 @@ where $\alpha_d$, $\alpha_q$ and $\alpha_o$ represent the static dipole, quadrup
 $\langle r_0^3\rangle$, $\langle r_0^5\rangle$ and $\langle r_0^7\rangle$ are the cut-off parameters.
 
 For atoms, one possible source for static dipole polarizabilities is [4]
-(except for Livermorium atom, atomic number 116).
+(except for the Livermorium atom, atomic number 116).
 There is no single aggregate source for static quadrupole and octupole polarizabilities.
 
 For atoms, cut-offs $\langle r_0^3\rangle$, $\langle r_0^5\rangle$ and $\langle r_0^7\rangle$ can be taken
 from bound states calculations, assuming that $\langle r_0\rangle$ is the radius
 of the outermost orbital of the target atom.
 
-Polarization potential can be also provided
+Polarization potential can also be provided
 in numerical form.
 It has to be provided in a text file named `vpol` located in the working directory, containing space-separated pairs $r\ \ V_{pol}(r)$ in rows (ordered by increasing $r$ values), e.g.
 ```
@@ -133,7 +133,7 @@ It is defined as the radius of a rigid sphere in the zero-energy total cross-sec
 The sign of a scattering length represents the type of interaction:
 positive for repulsion and negative for attraction.
 
-The common method for determining the scattering length $a$ involves
+The typical method for determining the scattering length $a$ involves
 analyzing the asymptotic behavior of the wave function:
 
 $a = -\lim_{k \to 0}\frac{\tan(\delta_0)}{k}$,
@@ -147,12 +147,12 @@ of the asymptote of the zero-energy ($\epsilon=0$) wave function with the $r$-ax
 The details of that approach are described in [5].
 
 > **Please note:**
-> _Zero energy_ wave function, used for accurate scattering lengths calculations
-> is not a typical, oscillating wave function.
+> _Zero energy_ wave function, used for accurate scattering length calculations
+> is not a typical oscillating wave function.
 
 ### References
 
-1. P. Syty and J.E. Sienkiewicz, Relativistic Multiconfiguration Dirac-Hartree-Fock in scattering of electrons from argon atoms,
+1. P. Syty and J.E. Sienkiewicz, Relativistic Multiconfiguration Dirac-Hartree-Fock in the scattering of electrons from argon atoms,
 _J. Phys. B: At. Mol. Opt. Phys._ 38 2859 (2005), https://doi.org/10.1088/0953-4075/38/16/001
 2. I.P. Grant, B.J. McKenzie, P.H. Norrington, D.F. Mayers, and N.C. Pyper. An atomic multiconfigurational Dirac-Fock package. Comput. Phys. Commun., 21:207–231, (1980), https://doi.org/10.1016/0010-4655(80)90041-7
 3. R.D. Cowan, The Theory of Atomic Structure and Spectra,
@@ -169,8 +169,8 @@ https://doi.org/10.1088/1361-6455/ad4fd1
 ## Current status
 
 ### Implemented and tested
-- Calculations of the continuum wave function of electron _elastically_ scattered from atoms and ions, with the model or numerical polarization term
-- Phase shift calculations (with grid control, to ensure correct results)
+- Calculations of the continuum wave function of electrons _elastically_ scattered from atoms and ions, with the model or numerical polarization term
+- Phase shift calculations (with grid control to ensure correct results)
 - Calculations of electronic scattering lengths using the _zero energy_ wave function
 - Normalization of the calculated continuum orbital
 
@@ -204,17 +204,17 @@ https://doi.org/10.1088/1361-6455/ad4fd1
 
 1. **Bound states**
 
-   Optimize bound states of the selected target (atom / ion)
+   Optimize bound states of the selected target (atom/ion)
    in a usual way (`rnucleus` => `rcsfgenerate` => `rwfnestimate` => `rangular` => `rmcdhf` => `rsave`
-   in the simplest case), or just take nuclear data (`isodata`)
-   and radial wave functions (`rwfn.out` / `.w`) files from any previous calculations.
+   in the simplest case), or take nuclear data (`isodata`)
+   and radial wave functions (`rwfn.out` / `.w`) files from previous calculations.
 
    This fork may also be used for that calculation,
    since it works _exactly_ as the original GRASP for bound states.
 
     > **Please note:**
     > Since only radial orbitals are used (and not the expansion coefficients),
-    > calling the `rci` code does not give any improvement.
+    > Calling the `rci` code does not improve anything.
 
 
 2. **CSF list**
@@ -222,7 +222,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
    By invoking `rcsfgenerate`, create a special `rcsf.inp` file with only one CSF,
    where 'core' is the configuration of the target atom or ion,
    and 'peel' consists of _one_ additional _inactive_ electron.
-   This electron will be treated as a continuum one;  its principal quantum number will be ignored,
+   This electron will be treated as a scattered one;  its principal quantum number will be ignored,
    and its quantum number $\kappa$ will be determined from the subshell designation
    and final $J$ value, resulting from coupling with the core.
     > **Examples for argon-electron scattering:**
@@ -252,13 +252,13 @@ CSF(s):
 
    Run `rangular` as usual (with _Full interaction_ option enabled).
 
-4. **Initial estimations of the radialal wave funcitons**
+4. **Initial estimations of the radial wave functions**
 
-   Run `rwfnestimate`, using the previously calculated radial wave functions
+   Run `rwfnestimate` using the previously calculated radial wave functions
    as initial estimation for the 'core' orbitals (option _1 -- GRASP92 File_).
-   For estimation of the additional electron which is designed to be a _continuum_ one, use the new option _5 -- Continuum orbital_.
+   To estimate the additional electron designed to be a _continuum_ one, use the new option _5 -- Continuum orbital_.
    Any other method (options _2 - 4_) should also work
-   (try them, if you encounter convergence problems during the actual calculations in the next step).
+   (try them if you encounter convergence problems during the actual calculations in the next step).
 
 5. **SCF procedure**
 
@@ -280,15 +280,15 @@ CSF(s):
     - answer _y_ when asked _Revise default radial grid parameters?_
     - enter new _RNT_ and _H_ values (firstly, the defaults might be kept)
     - enter new _HP_; use non-zero value to force the linearly-logarithmic grid,
-    which ensures adequate grid density far from the scattering centre;
-    _1.0_ or less is the good choice for a first try
+    which ensures adequate grid density far from the scattering center;
+    _1.0_ or less is a good choice for a first-try
     - enter new _N_; in general, use as a big number as possible to ensure as long grid as possible;
     _5000_ is the default, but even tens of thousands of points might be required in some cases, which would require code modification (_NNNP_ value in `src/lib/libmod/parameter_def_M.f90`) and recompilation
 
     > **Please note:**
     > If calculations do not converge (_Maximal iterations exceeded_),
     experiment with the other grid parameters,
-    > and/or try the other method for initial estimation of the radial wave function for the continuum electron.
+    > and/or try the other method to estimate the radial wave function for the continuum electron.
 
     > **Please note:**
     > Only the `rmcdhf` code has been adapted for continuum orbital calculations, not
@@ -300,17 +300,17 @@ CSF(s):
     (together with the bound orbitals), and also in a text-formatted file `continuum.csp`.
 
     If the grid is long enough and electron energy is not zero, calculated phase shift and scattering length
-    are written to the screen and to the `rmcdhf.sum` summary file. The accuracy of the scattering length strongly depends
-    on the electron energy
-    (smaller energy means better accuracy, since it should be calculated in the $k\to0$ limit).
+    are written to the screen and the `rmcdhf.sum` summary file. The accuracy of the scattering length strongly depends
+    on the electron energy.
+    (smaller energy means better accuracy since it should be calculated in the $k\to0$ limit).
 
     If the electron energy is set to zero, only the scattering length is calculated in a more accurate approach,
     as the intersection of the asymptote of the zero-energy wave function with the r-axis.
-    In that case, the additional information is given, which may be useful for error estimation.
-    First one is the relative error of straight line determination at the tail.
+    In that case, additional information is given, which may be helpful for error estimation.
+    The first one is the relative error of straight line determination at the tail.
     The second one is the percentage difference between the scattering length
-    calculated from the last two points on the grid,
-    and from the penultimate and the one before the penultimate point.
+    calculated from the last two points on the grid
+    and the penultimate and the one before the penultimate point.
     In both cases, a lower value means better accuracy.
 
 ## Examples
@@ -320,7 +320,7 @@ CSF(s):
 Bound states estimation, continuum orbital wave functions generation
 (for two different partial waves), phase shift calculations, scattering length calculations using the _zero energy_ approach;
 calculations with default, numerical and manually entered parameters of polarization potential.
-The energies of the incident electron were chosen to easily compare the results with those in
+The energies of the incident electron were chosen to compare the results with those in easily
 Y. Cheng, S. Liu, S. B. Zhang, and Y.-B. Tang, Phys. Rev. A 102, 012824 (2020),
 https://doi.org/10.1103/PhysRevA.102.012824.
 
@@ -328,13 +328,13 @@ Files in `/grasptest/continuum/argon-electron_scattering` directory:
 - `1_Ar_continuum_electron_s-wave_function` - script calculating continuum orbital of $\kappa = -1$ (_s_-wave, $J=1/2$) and electron energy $\epsilon=0.00124997$ hartree, using the dipole term of the polarization potential with default parameters
 - `2_Ar_continuum_electron_d-wave_function`- script calculating _normalized_ continuum orbital of $\kappa = 2$ (_d_-wave, $J=3/2$) and electron energy  $\epsilon=0.04499880$ hartree, using polarization potential read from a file
 - `3_Ar_electronic_scattering_length` - script calculating electronic scattering length using the zero-energy wave function
-- `Ar_bound_DF` - auxiliary script creating the nuclear data and calculating the bound states of argon atom (very simple case without correlations); there's no need to call it by hand, it is invoked automatically by all of the above scripts
+- `Ar_bound_DF` - auxiliary script creating the nuclear data and calculating the bound states of argon atom (very simple case without correlations); there's no need to call it by hand; it is invoked automatically by all of the above scripts
 - `clean` - auxiliary script, deleting all of the output files created during program execution
 - `vpol` - auxiliary file with the polarization potential given in numerical form; it is used by the second script above
 
 Scripts realizing the main calculations (beginning with a number) can be run independently and in any order.
 
-The results stay in a very good agreement with results from Cheng, when it comes to phase shifts
+The results stay in very good agreement with the results from Cheng when it comes to phase shifts
 in the first two examples ($\delta_0 = 0.03432$ vs. $0.03999$,  and $\delta_2^+ = 0.03241$ vs. $0.03253$),
 and electronic scattering length in the third example ($a_0 = -1.320$ vs. $-1.394$).
 
@@ -343,7 +343,7 @@ and electronic scattering length in the third example ($a_0 = -1.320$ vs. $-1.39
 Calculation of scattering length with default parameters of polarization potential,
 for a given `.w` file with optimized bound states.
 
-Files in `/grasptest/continuum/strontium_electronic_scattering_length` directory:
+Files in the `/grasptest/continuum/strontium_electronic_scattering_length` directory:
 - `Sr_scattering_length` - script calculating electronic scattering length using the zero-energy wave function
 - `isodata, Sr.w` - nuclear data and previously calculated bound states of strontium
 - `clean` - script cleaning the output files
@@ -359,7 +359,7 @@ Files in `/grasptest/continuum/strontium_electronic_scattering_length` directory
 
 The GRASPC modification of GRASP has not yet been published
 in a scientific journal. Until then, if you find it useful,
-please consider offering us co-authorship, or cite as:
+please consider offering us co-authorship or cite as:
 
 P. Syty, M.P. Piłat, J.E. Sienkiewicz, _GRASPC - GRASP package adapted for the generation of continuum orbitals wave functions_, https://github.com/sylaspg/grasp-continuum.git
 
@@ -367,10 +367,10 @@ P. Syty, M.P. Piłat, J.E. Sienkiewicz, _GRASPC - GRASP package adapted for the 
 ## Installation
 
 > **Please note:**
-> All the installation instructions for original GRASP
+> All the installation instructions for the original GRASP
 > are also valid for that fork, with the repository address changed to:
 `https://github.com/sylaspg/grasp-continuum.git`.
-Further in this section there are original instructions, adapted for the GRASPC repository. **All the credits goes to the GRASP contributors, who prepared the original installation procedure.**
+Further in this section are original instructions adapted for the GRASPC repository. **All the credits goes to the GRASP contributors, who prepared the original installation procedure.**
 
 To compile and install GRASPC, first clone this Git repository:
 
@@ -379,11 +379,11 @@ git clone https://github.com/sylaspg/grasp-continuum.git
 ```
 
 There are two ways to build GRASPC: either via [CMake](https://cmake.org/) or via the
-`Makefile`s in the source tree. Either works and you end up with the GRASPC binaries in the
+`Makefile`s in the source tree. Either works, and you will end up with the GRASPC binaries in the
 `bin/` directory.
 
 CMake is the recommended way to build GRASPC. The `Makefile`-based workflow is still there to
-make smoother to transition from `Makefile`s to a modern build system.
+make it smoother to transition from `Makefile`s to a modern build system.
 
 ### CMake-based build
 
@@ -396,12 +396,12 @@ cd grasp-continuum/ && ./configure.sh
 
 This will create a `build/` directory with the default _Release_ build
 configuration. However, `configure.sh` is just a simple wrapper around a `cmake`
-call and if you need more control over the build, you can always invoke `cmake`
+call, and if you need more control over the build, you can always invoke `cmake`
 yourself (see [CMake documentation](https://cmake.org/documentation/) for more
 information).
 
 To then compile GRASPC, you need to go into the out-of-source build directory and
-simply call `make`:
+call `make`:
 
 ```sh
 cd build/ && make install
@@ -412,14 +412,14 @@ Remarks:
 * Running `make install` instructs CMake to actually _install_ the resulting binaries into
   the conventional `bin/` directory at the root of the repository.
 
-  When you run just `make`, the resulting binaries will end up under the `build/` directory
+  When you run `make`, the resulting binaries will end up under the `build/` directory
   (specifically in `build/bin/`). This is useful when developing and debugging, as it allows
   you to compile many versions of the binaries from the same source tree with different
   compilation options (e.g. build with debug symbols enabled) by using several out of source
   build directories.
 
 * With CMake, GRASPC also supports parallel builds, which can be enabled by passing the `-j`
-  option to `make` (e.g. `make -j4 install` to build with four processes).
+  option to `make` (e.g., `make -j4 install` to build with four processes).
 
 * The CMake-based build allows running the (non-comprehensive) test suite by calling `ctest`
   in the `build/` directory. The configuration and source files for the tests are under
@@ -434,12 +434,12 @@ level directory:
 make
 ```
 
-In this case, the compilation of each of the libraries and programs happens in their
-respective directory under `src/` and the build artifacts are stored in the source tree.
+In this case, each library and program is compiled in their
+respective directory under `src/`, and the built artifacts are stored in the source tree.
 The resulting binaries and libraries will directly get installed under the `bin/` and `lib/`
 directories.
 
-To build a specific library or binary you can pass the path to the source directory as the
+To build a specific library or binary, you can pass the path to the source directory as the
 Make target:
 
 ```sh
@@ -451,17 +451,17 @@ make src/appl/rci90_mpi
 
 Note that any necessary library dependencies will also get built automatically.
 
-**WARNING:** the `Makefile`s do not know about the dependencies between the source files, so
-parallel builds (i.e. calling `make` with the `-j` option) does not work.
+**WARNING:** The `Makefiles' do not know about the dependencies between the source files, so
+parallel builds (i.e., calling `make` with the `-j` option) do not work.
 
 #### Customizing the build
 
-By default the `Makefile` is designed to use `gfortran`. The variables affecting GRASPC
+By default, the `Makefile` is designed to use `gfortran`. The variables affecting GRASPC
 builds are defined and documented at the beginning of the `Makefile`.
 
-For the user it should never be necessary to modify the `Makefile` itself. Rather, a
-`Make.user` file can be create next to the main `Makefile` where the build variables can be
-overridden. E.g. to use the Intel Fortran compiler instead, you may want to create the
+It should never be necessary for the user to modify the `Makefile` itself. Rather, a
+`Make.user` file can be created next to the main `Makefile` where the build variables can be
+overridden. E.g., to use the Intel Fortran compiler instead, you may want to create the
 following `Make.user` file:
 
 ```make
@@ -471,9 +471,9 @@ export FC_LD =
 export FC_MPI = mpiifort
 export OMPI_FC=${FC}
 ```
-where `-mkl=sequential` should be set depending on what version of ifort you have access to.
+where `-mkl=sequential` should be set depending on what version of ifort you can access.
 
-Alternatively, to customize the GNU gfortran build to e.g. use a specific version of the compiler, you can create a `Make.user` file such as
+Alternatively, to customize the GNU gfortran build to e.g., use a specific version of the compiler, you can create a `Make.user` file such as
 ```make
 export FC = gfortran-9
 export FC_FLAGS = -O3 -fno-automatic
@@ -482,7 +482,7 @@ export FC_MPI= mpifort
 export OMPI_FC=${FC}
 ```
 
-To set up a linker search path for the BLAS or LAPACK libraries you can
+To set up a linker search path for the BLAS or LAPACK libraries, you can
 set `FC_LD` as follows:
 
 ```make
