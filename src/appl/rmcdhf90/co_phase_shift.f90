@@ -100,7 +100,7 @@ SUBROUTINE co_phase_shift(J)
     wavelength = 2 * PI / wavenumber
     wavelength_csp = r_max - r_max1
     wavelength_diff = abs(wavelength - wavelength_csp) / wavelength * 100
-    WRITE(*,'(A,F13.8,A)') " Difference between analytical and numerical &
+    WRITE(*,'(A,F13.8,A)') " Difference between the analytical and numerical &
                    wavelength of the continuum spinor = ",wavelength_diff,"%"
     WRITE(ISTDE,'(A,F10.2,A,F7.2)') " Radial grid: Rmax = ", R(mfj), ", Rstep = ", R(mfj)-R(mfj-1)
     IF (wavelength_diff > 0.01D0) THEN
@@ -108,7 +108,7 @@ SUBROUTINE co_phase_shift(J)
         WRITE(ISTDE,*) "*** Warning: skipping phase shift calculation (too short radial grid)"
         RETURN
     ELSE
-        WRITE(ISTDE,*) "Radial grid is long enough to calculate the phase shift."
+        WRITE(ISTDE,*) "The radial grid is long enough to calculate the phase shift."
         CO_GRID_TOO_SHORT = .FALSE.
     END IF
 

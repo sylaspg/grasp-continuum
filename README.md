@@ -204,7 +204,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
 
 1. **Bound states**
 
-   Optimize bound states of the selected target (atom / ion)
+   Optimize bound states of the selected target (atom / ion) in GRASP
    in a usual way (`rnucleus` => `rcsfgenerate` => `rwfnestimate` => `rangular` => `rmcdhf` => `rsave`
    in the simplest case), or just take nuclear data (`isodata`)
    and radial wave functions (`rwfn.out` / `.w`) files from any previous calculations.
@@ -222,7 +222,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
    By invoking `rcsfgenerate`, create a special `rcsf.inp` file with only one CSF,
    where 'core' is the configuration of the target atom or ion,
    and 'peel' consists of _one_ additional _inactive_ electron.
-   This electron will be treated as a continuum one;  its principal quantum number will be ignored,
+   This electron will be treated as a scattered one;  its principal quantum number will be ignored,
    and its quantum number $\kappa$ will be determined from the subshell designation
    and final $J$ value, resulting from coupling with the core.
     > **Examples for argon-electron scattering:**
@@ -252,11 +252,11 @@ CSF(s):
 
    Run `rangular` as usual (with _Full interaction_ option enabled).
 
-4. **Initial estimations of the radialal wave funcitons**
+4. **Initial estimations of the radial wave functions**
 
    Run `rwfnestimate`, using the previously calculated radial wave functions
-   as initial estimation for the 'core' orbitals (option _1 -- GRASP92 File_).
-   For estimation of the additional electron which is designed to be a _continuum_ one, use the new option _5 -- Continuum orbital_.
+   as initial estimation for the 'core' orbitals (option _1 - GRASP92 File_).
+   For estimation of the additional electron which is designed to be a _continuum_ one, use the new option _5 - Continuum orbital_.
    Any other method (options _2 - 4_) should also work
    (try them, if you encounter convergence problems during the actual calculations in the next step).
 
@@ -271,7 +271,7 @@ CSF(s):
       - _0_ - do not include polarization potential
       - _1_ - include the dipole term of the model potential with default parameters:
             $\alpha_d$ taken from [2], and cut-off $\langle r_0^3\rangle$ taken from bound state calculations
-            as the size of the outermost orbital; here, the quadrupole term is omitted
+            as the size of the outermost orbital; here, the quadrupole and octupole terms are omitted
       - _2_ - include model potential with all parameters provided manually by the user; in turn:
             $\alpha_d$, $\langle r_0^3\rangle$, $\alpha_q$, $\langle r_0^5\rangle$, $\alpha_o$ and $\langle r_0^7\rangle$
       - _3_ - include numerical potential from the file named `vpol`
@@ -279,7 +279,7 @@ CSF(s):
     - answer _y_ when asked _Change default speed of light or radial grid parameters?_
     - answer _y_ when asked _Revise default radial grid parameters?_
     - enter new _RNT_ and _H_ values (firstly, the defaults might be kept)
-    - enter new _HP_; use non-zero value to force the linearly-logarithmic grid,
+    - enter new _HP_; this value is the step at the tail of the grid; use non-zero value to force the linearly-logarithmic grid,
     which ensures adequate grid density far from the scattering centre;
     _1.0_ or less is the good choice for a first try
     - enter new _N_; in general, use as a big number as possible to ensure as long grid as possible;

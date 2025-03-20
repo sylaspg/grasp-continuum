@@ -44,7 +44,7 @@ SUBROUTINE co_save_to_file(J)
     CLOSE(61)
 
     WRITE(ISTDE,*)
-    WRITE(ISTDE,*) "Continuum orbital saved to '", TRIM(FNAME), "' file."
+    WRITE(ISTDE,*) "The continuum orbital is saved to '", TRIM(FNAME), "' file."
 
     RETURN
 

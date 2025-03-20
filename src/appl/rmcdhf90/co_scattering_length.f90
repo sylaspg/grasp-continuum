@@ -96,7 +96,7 @@ SUBROUTINE co_scattering_length(J)
             wavenumber = SQRT(2*(-CO_ENERGY) + (-CO_ENERGY)/(C*C))
             CO_SL = -1/wavenumber * TAN(CO_PS)
             WRITE(ISTDE,*) "Scattering length = ", CO_SL
-            WRITE(ISTDE,*) "(this is just an estimate, calculated from phase shift of non-zero energy continuum spinor;"
+            WRITE(ISTDE,*) "(this is just an estimate, calculated from the phase shift of non-zero energy continuum spinor;"
             WRITE(ISTDE,*) "to have a more accurate result, repeat the calculation with zero energy)"
 
         END IF

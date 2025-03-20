@@ -51,7 +51,7 @@ SUBROUTINE co_add_polarization_potential()
 
             ! Try to read potential from file
             IF (vpol_file_exists) THEN
-                WRITE(ISTDE,*) "Include polarization potential: read from '", TRIM(vpol_file), "' file."
+                WRITE(ISTDE,*) "Include polarization potential: read from the '", TRIM(vpol_file), "' file."
 
                 ! Test for number of datapoints of numerical potential
                 n_vpol = 0

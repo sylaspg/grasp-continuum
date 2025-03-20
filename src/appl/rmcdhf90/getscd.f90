@@ -116,7 +116,7 @@
                READ (5, *) CO_ENERGY
                IF (CO_ENERGY >= 0) EXIT
             END DO
-            CO_ENERGY = -CO_ENERGY
+            CO_ENERGY = -CO_ENERGY ! Reverse, to meet the GRASP convention
             WRITE (ISTDE,'(A)') "Include polarization potential? (0/1/2/3)"
             WRITE (ISTDE,'(A)') "     0 -- No"
             WRITE (ISTDE,'(A)') &
@@ -162,6 +162,8 @@
                   CO_INCLUDE_POLARIZATION = .TRUE.
                   CO_POLARIZATION_FROM_FILE = .TRUE.
                CASE DEFAULT
+                  WRITE (ISTDE,*) "Unknown option selected; polarization &
+                                   potential will not be included."
                   CO_INCLUDE_POLARIZATION = .FALSE.
             END SELECT
             CO_NORMALIZE = .FALSE.
