@@ -20,8 +20,7 @@ The main idea is to use as many computational processes as they are implemented 
 by adapting them to calculate continuum orbitals wave functions.
 
 This fork is entirely transparent for usual calculations in GRASP (bound states and their properties).
-Only when calculations involving continuum orbital are requested (during the execution of the `rmcdhf` program).
-The default flow is changed, and different outputs are produced.
+Only when calculations involving continuum orbital are requested (during the execution of the `rmcdhf` program), the default flow is changed, and different outputs are produced.
 The only differences are listed below:
 - the default number of points in the radial (NNNP) is increased to 5000 in the `src/lib/libmod/parameter_def_M.f90` file, since continuum orbitals have to be calculated on the far-reaching computational grid;
 for larger systems, it is recommended to magnify the grid size even several times
@@ -74,7 +73,7 @@ The currently implemented _per energy_ continuum wave function normalization
 is described in [3].
 
 > **Please note:** For calculations of phase shifts and scattering lengths,
-> Normalization is usually not required.
+> normalization is usually not required.
 
 ### Polarization potential
 
