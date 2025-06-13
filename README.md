@@ -1,25 +1,29 @@
 # GRASPC - GRASP package adapted for the generation of continuum orbitals wave functions
 
-This repository is a fork of
+This repository, GRASPC, is a fork of
 **The General-purpose Relativistic Atomic Structure Package (GRASP)** -
 a set of Fortran 90 programs for performing fully relativistic electron structure calculations of atoms.
 
 [Link to GRASP repository](https://github.com/compas/grasp)
 
-## About this fork
+
+## About GRASPC
 
 ![GitHub Release](https://img.shields.io/github/v/release/sylaspg/grasp-continuum)
 ![GitHub Release Date](https://img.shields.io/github/release-date/sylaspg/grasp-continuum)
 ![GitHub last commit](https://img.shields.io/github/last-commit/sylaspg/grasp-continuum)
 
-This fork is intended to incorporate the scattered (continuum) electron calculations
-in elastic (single-channel) and inelastic (multi-channel) processes into GRASP.
+GRASPC is a fork of GRASP, intended to incorporate the scattered (continuum) electron calculations
+in elastic (single-channel) and inelastic (multi-channel) processes.
 > **Please note:** Currently, only elastic processes are implemented.
 
-The main idea is to use as many computational processes as they are implemented in GRASP,
+[Link to GRASPC paper in
+Computer Physics Communications](https://www.sciencedirect.com/science/article/pii/S0010465525001936)
+
+The main idea is to use as many computational apparatus as they are implemented in GRASP,
 by adapting them to calculate continuum orbitals wave functions.
 
-This fork is entirely transparent for usual calculations in GRASP (bound states and their properties).
+GRASPC is entirely transparent for usual calculations in GRASP (bound states and their properties).
 Only when calculations involving continuum orbital are requested (during the execution of the `rmcdhf` program), the default flow is changed, and different outputs are produced.
 The only differences are listed below:
 - the default number of points in the radial (NNNP) is increased to 5000 in the `src/lib/libmod/parameter_def_M.f90` file, since continuum orbitals have to be calculated on the far-reaching computational grid;
@@ -59,8 +63,8 @@ are solved using the _outward_ integration method implemented in GRASP. In the a
 $\alpha$ is the fine structure constant,
 $\epsilon$ is the energy of the scattered particle,
 $V = V(r)$ is the Coulomb potential,
-$Vpol = Vpol(r)$ is a polarization potential,
-and $X(P)$ and $X(Q)$ are the exchange terms [2].
+$V_{pol} = V_{pol}(r)$ is a polarization potential,
+and $X^{(P)}$ and $X^{(Q)}$ are the exchange terms [2].
 
 > **Please note:** From the perspective of the GRASP source code, bound orbital energies are _positive_.
 Thus, the continuum electron energy is considered _negative_.
@@ -87,9 +91,9 @@ $V_{pol}\left(r\right)=-\frac{1}{2}\frac{\alpha_d r^2}{\left(r^3+\langle r_0^3\r
 where $\alpha_d$, $\alpha_q$ and $\alpha_o$ represent the static dipole, quadrupole and octupole polarizabilities, respectively;
 $\langle r_0^3\rangle$, $\langle r_0^5\rangle$ and $\langle r_0^7\rangle$ are the cut-off parameters.
 
-For atoms, one possible source for static dipole polarizabilities is [4]
+For atoms, a great source for static dipole polarizabilities is [4]
 (except for the Livermorium atom, atomic number 116).
-There is no single aggregate source for static quadrupole and octupole polarizabilities.
+There is no such a similar source for static quadrupole and octupole polarizabilities, unfortunately.
 
 For atoms, cut-offs $\langle r_0^3\rangle$, $\langle r_0^5\rangle$ and $\langle r_0^7\rangle$ can be taken
 from bound states calculations, assuming that $\langle r_0\rangle$ is the radius
@@ -97,7 +101,8 @@ of the outermost orbital of the target atom.
 
 Polarization potential can also be provided
 in numerical form.
-It has to be provided in a text file named `vpol` located in the working directory, containing space-separated pairs $r\ \ V_{pol}(r)$ in rows (ordered by increasing $r$ values), e.g.
+It has to be provided in a text file named `vpol` located in the working directory, containing space-separated pairs $r\ \ V_{pol}(r)$ in rows
+(in Bohr radii $a_0$, and hartree units, respectively), ordered by increasing $r$ values, e.g.
 ```
 1.00000E-05 -4.10660E-07
 1.05127E-05 -4.31715E-07
@@ -125,6 +130,12 @@ Therefore, for the $l$-th partial wave (except the $l=0$ case) we obtain two pha
 > has to be calculated far enough from the origin,
 > to ensure that atom-electron interaction can be neglected.
 
+>**Please note:**
+> The phase shift is determined to the
+nearest $2\pi$, and in many scientific publications is given in the $[−\pi, \pi]$ range.
+> Thus, the calculated value is shifted by $2\pi$ if necessary, giving the second,
+equivalent value in the output
+
 ### Scattering length
 
 Scattering length is one of the most useful parameters for describing low-energy electron-atom collisions.
@@ -149,20 +160,26 @@ The details of that approach are described in [5].
 > _Zero energy_ wave function, used for accurate scattering length calculations
 > is not a typical oscillating wave function.
 
+More detailed explanations of the theoretical background
+and computational procedure
+can be found in [6].
+
 ### References
 
 1. P. Syty and J.E. Sienkiewicz, Relativistic Multiconfiguration Dirac-Hartree-Fock in the scattering of electrons from argon atoms,
-_J. Phys. B: At. Mol. Opt. Phys._ 38 2859 (2005), https://doi.org/10.1088/0953-4075/38/16/001
-2. I.P. Grant, B.J. McKenzie, P.H. Norrington, D.F. Mayers, and N.C. Pyper. An atomic multiconfigurational Dirac-Fock package. Comput. Phys. Commun., 21:207–231, (1980), https://doi.org/10.1016/0010-4655(80)90041-7
+_J. Phys. B: At. Mol. Opt. Phys._ 38 (2005) 2859. https://doi.org/10.1088/0953-4075/38/16/001
+2. I.P. Grant, B.J. McKenzie, P.H. Norrington, D.F. Mayers, and N.C. Pyper. An atomic multiconfigurational Dirac-Fock package. Comput. Phys. Commun. 21 (1980) 207–231. https://doi.org/10.1016/0010-4655(80)90041-7
 3. R.D. Cowan, The Theory of Atomic Structure and Spectra,
-_University of California Press, Oakland_ pp. 522–524 (1981), https://www.ucpress.edu/book/9780520038219/the-theory-of-atomic-structure-and-spectra
+_University of California Press, Berkeley_ (1981) pp. 516–521. https://www.ucpress.edu/book/9780520038219/the-theory-of-atomic-structure-and-spectra
 4. P. Schwerdtfeger and J.K. Nagle,
 2018 Table of static dipole polarizabilities of the neutral elements in the periodic table,
-_Molecular Physics_ 117 9-12 (2019), https://doi.org/10.1080/00268976.2018.1535143
+_Molecular Physics_ 117 (2019) 9-12. https://doi.org/10.1080/00268976.2018.1535143
 5. P. Syty, M.P. Piłat, J.E. Sienkiewicz,
 Calculation of electron scattering lengths on Ar, Kr, Xe, Rn and Og atoms,
-_J. Phys. B: At. Mol. Opt. Phys._ 57 175202 (2024),
+_J. Phys. B: At. Mol. Opt. Phys._ 57  (2024) 175202.
 https://doi.org/10.1088/1361-6455/ad4fd1
+6. P. Syty, M. Piłat, J.E. Sienkiewicz, _GRASPC – GRASP package adapted for the generation of continuum orbitals wave functions_, Comput. Phys. Commun. 315 (2025) 109691.
+https://doi.org/10.1016/j.cpc.2025.109691
 
 
 ## Current status
@@ -182,7 +199,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
 
 - **2024-07-18**
   - `rmcdhf` Added: phase shift calculation
-  - `rwfnestimate` Added: Dedicated method for initial estimation of the radial wave function for continuum electron
+  - `rwfnestimate` Added: Dedicated method for initial estimate of the radial wave function for continuum electron
   - `grasptest/continuum` Added: new example for electron-argon scattering (_d_-wave calculation)
   - `README` Updated: most sections, the most important updates for _User guide_ and _Theoretical background_
   - `rmcdhf` Now, the energy of the continuum electron should be entered as a positive value (or zero)
@@ -208,7 +225,7 @@ https://doi.org/10.1088/1361-6455/ad4fd1
    in the simplest case), or take nuclear data (`isodata`)
    and radial wave functions (`rwfn.out` / `.w`) files from previous calculations.
 
-   This fork may also be used for that calculation,
+   GRASPC may also be used for that calculation,
    since it works _exactly_ as the original GRASP for bound states.
 
     > **Please note:**
@@ -319,9 +336,9 @@ CSF(s):
 Bound states estimation, continuum orbital wave functions generation
 (for two different partial waves), phase shift calculations, scattering length calculations using the _zero energy_ approach;
 calculations with default, numerical and manually entered parameters of polarization potential.
-The energies of the incident electron were chosen to compare the results with those in easily
+The energies of the incident electron were chosen to compare the results with those in
 Y. Cheng, S. Liu, S. B. Zhang, and Y.-B. Tang, Phys. Rev. A 102, 012824 (2020),
-https://doi.org/10.1103/PhysRevA.102.012824.
+https://doi.org/10.1103/PhysRevA.102.012824 easily.
 
 Files in `/grasptest/continuum/argon-electron_scattering` directory:
 - `1_Ar_continuum_electron_s-wave_function` - script calculating continuum orbital of $\kappa = -1$ (_s_-wave, $J=1/2$) and electron energy $\epsilon=0.00124997$ hartree, using the dipole term of the polarization potential with default parameters
@@ -348,26 +365,25 @@ Files in the `/grasptest/continuum/strontium_electronic_scattering_length` direc
 - `clean` - script cleaning the output files
 
 ## Contributors
-#### Code development and testing; preparing of the documentation; preparing and scripting the test cases; maintaining the repository
+#### Code development and testing; preparing of the documentation; preparing and scripting the test cases; maintaining the repository; co-authoring the publication
 - Paweł Syty, Gdańsk University of Technology, pawel.syty@pg.edu.pl
-#### Giving the ideas and theoretical background; proposing and improving the test cases; improving the documentation
+#### Giving the ideas and theoretical background; proposing and improving the test cases; improving the documentation;
+co-authoring the publication
 - Józef E. Sienkiewicz, Gdańsk University of Technology
 - Michał Piłat, Gdańsk University of Technology
 
 ## How to cite
 
-The GRASPC modification of GRASP has not yet been published
-in a scientific journal. Until then, if you find it useful,
-please consider offering us co-authorship or cite as:
-
-P. Syty, M.P. Piłat, J.E. Sienkiewicz, _GRASPC - GRASP package adapted for the generation of continuum orbitals wave functions_, https://github.com/sylaspg/grasp-continuum.git
+P. Syty, M. Piłat, J.E. Sienkiewicz, _GRASPC – GRASP package adapted for the generation of continuum orbitals wave functions_,
+Comput. Phys. Commun. 315 (2025) 109691.
+https://doi.org/10.1016/j.cpc.2025.109691
 
 
 ## Installation
 
 > **Please note:**
 > All the installation instructions for the original GRASP
-> are also valid for that fork, with the repository address changed to:
+> are also valid for GRASPC, with the repository address changed to:
 `https://github.com/sylaspg/grasp-continuum.git`.
 Further in this section are original instructions adapted for the GRASPC repository. **All the credits goes to the GRASP contributors, who prepared the original installation procedure.**
 

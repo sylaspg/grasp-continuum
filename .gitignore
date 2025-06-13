@@ -19,3 +19,15 @@ build-*/
 # Ignore output log files
 *.out
 *.err
+
+# Ignore output from the test cases
+/grasptest/continuum/argon-electron_scattering/clist.new
+/grasptest/continuum/argon-electron_scattering/i*
+/grasptest/continuum/argon-electron_scattering/m*
+/grasptest/continuum/argon-electron_scattering/r*
+/grasptest/continuum/argon-electron_scattering/DF*
+/grasptest/continuum/strontium_electronic_scattering_length/clist.new
+/grasptest/continuum/strontium_electronic_scattering_length/i*
+/grasptest/continuum/strontium_electronic_scattering_length/m*
+/grasptest/continuum/strontium_electronic_scattering_length/r*
+/grasptest/continuum/strontium_electronic_scattering_length/DF*
