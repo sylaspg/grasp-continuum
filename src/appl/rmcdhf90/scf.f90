@@ -159,12 +159,16 @@
 ! Mark last orbital as a continuum one; it should be only one electron there
       IF (CO_CALCULATE) THEN
          CO_ORBITAL = NW
-         IF (CO_CALCULATE .AND. UCF(CO_ORBITAL) /= 1) THEN
-            WRITE(ISTDE,*)
-            WRITE(ISTDE,*) "RMCDHF: In continuum orbital calculations ",&
-                    "only one electron at the outermost orbital is allowed."
-            STOP "*** Program execution terminated. ***"
-         END IF
+            ! Check for number of electron in the outermost orbital
+            ! for each CSF; it should be 1
+            DO I=1,NCF
+               IF (IQA(CO_ORBITAL,I) /=1) THEN
+                  WRITE(ISTDE,*)
+                  WRITE(ISTDE,*) "RMCDHF: In continuum orbital calculations ",&
+                       "only one electron in the outermost orbital is allowed."
+                  STOP "*** Program execution terminated. ***"
+               END IF
+            END DO
          WRITE(ISTDE,*)
          WRITE(ISTDE,'(A,I2,A,A,I3,A,I2,A,F15.10,A)') " Orbital", NP(NW), &
            NH(NW),"(no.",CO_ORBITAL,") marked as continuum (kappa = ", &
